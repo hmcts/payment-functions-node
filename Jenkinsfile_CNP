@@ -1,0 +1,18 @@
+#!groovy
+//noinspection GroovyUnusedAssignment
+@Library("Infrastructure") _
+
+import uk.gov.hmcts.contino.Environment
+
+Environment environment = new Environment(env)
+
+def product = "payment-func"
+
+onMaster {
+  withInfrastructurePipeline('product, environment.nonProdName, 'nonprod')
+  withInfrastructurePipeline(product, environment.prodName, 'prod')
+}
+
+onDemo {
+  withInfrastructurePipeline(product, environment.demoName, 'nonprod')
+}

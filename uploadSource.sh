@@ -6,10 +6,6 @@ zipDir=$3
 env=$4
 
 cd $zipDir
-echo "Installing node modules"
-npm install
-#dotnet build -o bin
-#func extensions install  # Jenkins need to install either dotnet or azure-functions-core-tools
 
 echo "Zipping function contents"
 zip -r content-$webapp.zip ./

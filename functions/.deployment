@@ -1,2 +1,4 @@
 [config]
-command = dotnet build -o bin
+#command = dotnet build -o bin
+SCM_DO_BUILD_DURING_DEPLOYMENT=true
+SCM_COMMAND_IDLE_TIMEOUT = 600

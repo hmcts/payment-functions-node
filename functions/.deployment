@@ -1,1 +1,2 @@
 [config]
+command = npm run postinstall

@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "postinstall": "./node_modules/azure-functions-core-tools/bin/func extensions install"
+    "postinstall": "dotnet build -o bin"
   },
   "dependencies": {
     "azure-functions-core-tools": "^2.1.748",

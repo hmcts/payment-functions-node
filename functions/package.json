@@ -11,8 +11,9 @@
     "postinstall": "./node_modules/azure-functions-core-tools/bin/func extensions install"
   },
   "dependencies": {
-    "superagent": "^3.8.2",
-    "azure-functions-core-tools": "^2.1.748"
+    "azure-functions-core-tools": "^2.1.748",
+    "dotnet": "^1.1.4",
+    "superagent": "^3.8.2"
   },
   "devDependencies": {}
 }

@@ -8,7 +8,7 @@ env=$4
 cd $zipDir
 echo "Installing node modules and extensions"
 npm install
-
+npm run postinstall
 #dotnet build -o bin
 #func extensions install  # Jenkins need to install either dotnet or azure-functions-core-tools
 

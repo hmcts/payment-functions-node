@@ -1,2 +1,2 @@
 [config]
-command = npm run postinstall
+command = dotnet build -o bin

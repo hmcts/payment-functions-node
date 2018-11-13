@@ -1,26 +1,46 @@
-const http = require('http');
+const request = require('superagent');
+const URL = require("url");
 
-module.exports = async function(context, mySbMsg) {
-    context.log.error('Tarun ServiceBus queue trigger function processed message', mySbMsg);
-    context.log.error('EnqueuedTimeUtc =', context.bindingData.enqueuedTimeUtc);
-    context.log.error('DeliveryCount =', context.bindingData.deliveryCount);
-    context.log.error('MessageId =', context.bindingData.messageId);
+module.exports = async function (context, mySbMsg) {
 
-    http.get('http://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
-        let data = '';
+    context.log.error('Message Content =', mySbMsg);
 
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
+    if( ! context.bindingData) {
+        context.log.error('No binding data');
+        return;
+    }
 
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-            console.log(data);
-        });
+    let serviceCallbackUrl = context.bindingData.serviceCallbackUrl;
 
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
+    if( !serviceCallbackUrl) {
+        serviceCallbackUrl = context.bindingData.userProperties.serviceCallbackUrl;
 
+        if(!serviceCallbackUrl) {
+            context.log.error('No serviceCallbackUrl');
+            return;
+        }
+
+    }
+
+    serviceCallbackUrl = URL.parse(serviceCallbackUrl);
+
+
+
+    context.log.error('Binding data =', context.bindingData);
+    context.log.error('ServiceCallbackUrl =', context.bindingData.userProperties.serviceCallbackUrl);
+
+    request
+        .post(serviceCallbackUrl)
+        .send(JSON.stringify(mySbMsg))
+        .end(
+            function (err, response) {
+
+                if (err) {
+                    context.log.error("Error " + err.status + " sending message " + mySbMsg + " to " + serviceCallbackUrl);
+                } else {
+                    context.log.error('Message Sent Succesfully');
+                }
+
+            }
+        )
 };

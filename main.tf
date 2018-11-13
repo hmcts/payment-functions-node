@@ -22,6 +22,7 @@ module "function_app" {
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
     APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    SCM_DO_BUILD_DURING_DEPLOYMENT=true
   }
 }
 

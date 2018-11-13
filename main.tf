@@ -24,6 +24,7 @@ module "function_app" {
     WEBSITE_NODE_DEFAULT_VERSION = "8.11.1"
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
     APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
+    dummy = "dummy"
   }
 }
 

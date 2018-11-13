@@ -20,9 +20,11 @@ module "function_app" {
   plan_type = "dedicated"
   common_tags = "${var.common_tags}"
   app_settings = {
+    FUNCTIONS_EXTENSION_VERSION = "~2"
+    FUNCTIONS_WORKER_RUNTIME = "node"
+    WEBSITE_NODE_DEFAULT_VERSION = "8.11.1"
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
     APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
-    SCM_DO_BUILD_DURING_DEPLOYMENT="true"
   }
 }
 

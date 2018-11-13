@@ -5,9 +5,9 @@ locals {
 
 resource "azurerm_application_insights" "appinsights" {
   name                = "${var.product}-${var.env}"
-  location            = "${var.location}"
+  location            = "West Europe"
   resource_group_name = "${local.rg_name}"
-  application_type    = "Other"
+  application_type    = "Web"
 }
 
 module "function_app" {

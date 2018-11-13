@@ -5,17 +5,22 @@ module.exports = async function (context, mySbMsg) {
 
     context.log.error('Message Content =', mySbMsg);
 
-    if( ! context.bindingData) {
+    if (!mySbMsg) {
+        context.log.error('No body received');
+        return;
+    }
+
+    if (!context.bindingData) {
         context.log.error('No binding data');
         return;
     }
 
     let serviceCallbackUrl = context.bindingData.serviceCallbackUrl;
 
-    if( !serviceCallbackUrl) {
+    if (!serviceCallbackUrl) {
         serviceCallbackUrl = context.bindingData.userProperties.serviceCallbackUrl;
 
-        if(!serviceCallbackUrl) {
+        if (!serviceCallbackUrl) {
             context.log.error('No serviceCallbackUrl');
             return;
         }
@@ -24,23 +29,14 @@ module.exports = async function (context, mySbMsg) {
 
     serviceCallbackUrl = URL.parse(serviceCallbackUrl);
 
+    const res = await request
+        .patch(serviceCallbackUrl)
+        .send(mySbMsg);
 
+    if (res.status >= 200 && res.status < 300) {
+        context.log.error('Message Sent Succesfully');
+    } else {
+        context.log.error("Error " + res.status + " sending message " + mySbMsg + " to " + serviceCallbackUrl);
+    }
 
-    context.log.error('Binding data =', context.bindingData);
-    context.log.error('ServiceCallbackUrl =', context.bindingData.userProperties.serviceCallbackUrl);
-
-    request
-        .post(serviceCallbackUrl)
-        .send(JSON.stringify(mySbMsg))
-        .end(
-            function (err, response) {
-
-                if (err) {
-                    context.log.error("Error " + err.status + " sending message " + mySbMsg + " to " + serviceCallbackUrl);
-                } else {
-                    context.log.error('Message Sent Succesfully');
-                }
-
-            }
-        )
 };

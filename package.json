@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "func host start --debug",
-    "test": "mocha 'test/**/*.test.js'",
+    "test": "mocha test/*.js",
     "postinstall": ".\\node_modules\\azure-functions-core-tools\\bin\\func extensions install",
     "deploy": "func azure functionapp publish payments-functions-node"
   },
@@ -16,11 +16,13 @@
     "azure-functions-core-tools": "latest"
   },
   "devDependencies": {
+    "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "debug": "^4.1.0",
+    "express": "^4.16.4",
     "mocha": "^5.2.0",
     "proxyquire": "^2.1.0",
-    "sinon": "^7.1.1",
+    "sinon": "^5.0.1-next.1",
     "sinon-chai": "^3.2.0"
   }
 }

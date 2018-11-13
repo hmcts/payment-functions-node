@@ -3,6 +3,13 @@ locals {
   func_app_name = "payment-node-${var.env}"
 }
 
+resource "azurerm_application_insights" "appinsights" {
+  name                = "${var.product}-${var.env}"
+  location            = "${var.location}"
+  resource_group_name = "${local.rg_name}"
+  application_type    = "Other"
+}
+
 module "function_app" {
   source = "git@github.com:hmcts/ccpay-module-function?ref=master"
   env = "${var.env}"
@@ -14,6 +21,7 @@ module "function_app" {
   common_tags = "${var.common_tags}"
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
+    APPINSIGHTS_INSTRUMENTATIONKEY = "${azurerm_application_insights.appinsights.instrumentation_key}"
   }
 }
 

@@ -22,6 +22,11 @@ project.lock.json
 appsettings.json
 local.settings.json
 
+functions/local.settings.json
+functions/node_modules
+functions/bin
+functions/obj
+
 node_modules
 
 # Local python packages

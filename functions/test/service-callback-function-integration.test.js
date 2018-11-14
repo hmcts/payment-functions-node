@@ -92,7 +92,8 @@ beforeEach(function () {
 
         log: {
             error: console.log,
-            debug: function () {}
+            info: console.log,
+            debug: console.log
         },
 
         bindingData: bindingData

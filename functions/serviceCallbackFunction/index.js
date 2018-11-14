@@ -3,8 +3,6 @@ const URL = require("url");
 
 module.exports = async function (context, mySbMsg) {
 
-    context.log.error('Message Content =', mySbMsg);
-
     if (!mySbMsg) {
         context.log.error('No body received');
         return;
@@ -34,7 +32,7 @@ module.exports = async function (context, mySbMsg) {
         .send(mySbMsg);
 
     if (res.status >= 200 && res.status < 300) {
-        context.log.error('Message Sent Succesfully');
+        context.log.info('Message Sent Succesfully to ' + serviceCallbackUrl);
     } else {
         context.log.error("Error " + res.status + " sending message " + mySbMsg + " to " + serviceCallbackUrl);
     }

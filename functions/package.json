@@ -8,13 +8,15 @@
   },
   "scripts": {
     "start": "node index.js",
+    "local": "func host start --debug",
+    "deploy": "func azure functionapp publish payments-functions-node",
+    "setup": "func extensions install",
     "test": "mocha test/*.js"
   },
   "dependencies": {
     "superagent": "^3.8.2"
   },
   "devDependencies": {
-    "azure-functions-core-tools": "latest",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "debug": "^4.1.0",

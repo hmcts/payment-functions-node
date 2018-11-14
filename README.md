@@ -4,19 +4,38 @@
 
 Receives a message from the service bus which is then sent to a callback endpoint by HTTP PATCH
 
-**How to test and develop**
+**How to test and develop locally**
 
 Installation
 
 `npm install -g azure-functions-core-tools`
 
-`./node_modules/azure-functions-core-tools/bin/func extensions install`
-
 `npm install`
+
+`npm run setup`
+
+Configuration
+
+Create a `local.settings.json` file inside the functions folder with the following content:
+
+`
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=XXX",
+    "ServiceCallbackBusConnection" : "Endpoint=XXX"
+  }
+}
+`
+
+_Copy the storage value from the functionapp server you want to emulate.
+
+Copy the bus connection from either the functionapp or the servicebus._
 
 Start
 
-`npm start` 
+`npm run local` 
 
 Run tests
 

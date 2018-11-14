@@ -1,26 +1,42 @@
-const http = require('http');
+const request = require('superagent');
+const URL = require("url");
 
-module.exports = async function(context, mySbMsg) {
-    context.log.error('Tarun ServiceBus queue trigger function processed message', mySbMsg);
-    context.log.error('EnqueuedTimeUtc =', context.bindingData.enqueuedTimeUtc);
-    context.log.error('DeliveryCount =', context.bindingData.deliveryCount);
-    context.log.error('MessageId =', context.bindingData.messageId);
+module.exports = async function (context, mySbMsg) {
 
-    http.get('http://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', (resp) => {
-        let data = '';
+    context.log.error('Message Content =', mySbMsg);
 
-        // A chunk of data has been recieved.
-        resp.on('data', (chunk) => {
-            data += chunk;
-        });
+    if (!mySbMsg) {
+        context.log.error('No body received');
+        return;
+    }
 
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-            console.log(data);
-        });
+    if (!context.bindingData) {
+        context.log.error('No binding data');
+        return;
+    }
 
-    }).on("error", (err) => {
-        console.log("Error: " + err.message);
-    });
+    let serviceCallbackUrl = context.bindingData.serviceCallbackUrl;
+
+    if (!serviceCallbackUrl) {
+        serviceCallbackUrl = context.bindingData.userProperties.serviceCallbackUrl;
+
+        if (!serviceCallbackUrl) {
+            context.log.error('No serviceCallbackUrl');
+            return;
+        }
+
+    }
+
+    serviceCallbackUrl = URL.parse(serviceCallbackUrl);
+
+    const res = await request
+        .patch(serviceCallbackUrl)
+        .send(mySbMsg);
+
+    if (res.status >= 200 && res.status < 300) {
+        context.log.error('Message Sent Succesfully');
+    } else {
+        context.log.error("Error " + res.status + " sending message " + mySbMsg + " to " + serviceCallbackUrl);
+    }
 
 };

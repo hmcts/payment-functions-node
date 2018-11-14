@@ -2,20 +2,19 @@
   "name": "payment-functions-node",
   "version": "1.0.0",
   "private": true,
+  "main": "index.js",
   "engines": {
     "node": "8.11.1"
   },
   "scripts": {
-    "start": "func host start --debug",
-    "test": "mocha test/*.js",
-    "postinstall": ".\\node_modules\\azure-functions-core-tools\\bin\\func extensions install",
-    "deploy": "func azure functionapp publish payments-functions-node"
+    "start": "node index.js",
+    "test": "mocha test/*.js"
   },
   "dependencies": {
-    "superagent": "^3.8.2",
-    "azure-functions-core-tools": "latest"
+    "superagent": "^3.8.2"
   },
   "devDependencies": {
+    "azure-functions-core-tools": "latest",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "debug": "^4.1.0",

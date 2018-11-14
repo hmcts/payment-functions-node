@@ -40,3 +40,20 @@ venv.bak/
 __pycache__/
 *.py[cod]
 *$py.class
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+*.class
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+
+node_modules/
+package-lock.json
+.project
+.settings/

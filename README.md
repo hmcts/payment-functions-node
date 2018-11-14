@@ -6,6 +6,8 @@ Receives a message from the service bus which is then sent to a callback endpoin
 
 **How to test and develop**
 
+Go to functions directory `$ cd functions`
+
 Installation
 
 `npm install -g azure-functions-core-tools`

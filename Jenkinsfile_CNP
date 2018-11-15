@@ -9,7 +9,7 @@ Environment environment = new Environment(env)
 def product = "payment"
 
 onMaster {
-  withInfrastructurePipeline('product, environment.nonProdName, 'nonprod')
+  withInfrastructurePipeline(product, environment.nonProdName, 'nonprod')
   withInfrastructurePipeline(product, environment.prodName, 'prod')
 }
 

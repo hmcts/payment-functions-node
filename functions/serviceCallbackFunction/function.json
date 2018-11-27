@@ -2,11 +2,17 @@
   "bindings": [
     {
       "topicName": "serviceCallbackTopic",
-      "subscriptionName" : "defaultServiceCallbackSubscription",
+      "subscriptionName": "defaultServiceCallbackSubscription",
       "connection": "ServiceCallbackBusConnection",
       "name": "serviceCallback",
       "type": "serviceBusTrigger",
       "direction": "in"
+    },
+    {
+      "name": "tableBinding",
+      "type": "table",
+      "direction": "out",
+      "tableName": "FailedMessages"
     }
   ],
   "disabled": false

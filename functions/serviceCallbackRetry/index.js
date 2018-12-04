@@ -2,7 +2,7 @@
   https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-nodejs-how-to-use-queues
   https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-nodejs-how-to-use-topics-subscriptions
 */
-const azure = require('azure');
+const azure = require('azure-sb');
 
 const MAX_RETRIES = 3;
 

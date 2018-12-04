@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "superagent": "^3.8.2",
-    "azure": "latest"
+    "azure-sb": "latest"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",

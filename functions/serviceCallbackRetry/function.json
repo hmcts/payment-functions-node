@@ -5,13 +5,6 @@
       "name": "failedMessagesTimerTrigger",
       "type": "timerTrigger",
       "direction": "in"
-    },
-    {
-      "name": "failedMessagesEntity",
-      "type": "table",
-      "tableName": "FailedMessages",
-      "partitionKey": "FailedMessages",
-      "direction": "in"
     }
   ],
   "disabled": false

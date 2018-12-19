@@ -1,6 +1,7 @@
 const request = require('superagent');
 
 module.exports = async function (context, mySbMsg) {
+     context.log(mySbMsg);
 
     if (!mySbMsg) {
         context.log.error('No body received');
@@ -23,11 +24,11 @@ module.exports = async function (context, mySbMsg) {
         }
 
     }
-
+    
     const res =
         await
             request
-                .patch(serviceCallbackUrl)
+                .put(serviceCallbackUrl)
                 .send(mySbMsg);
 
     if (res.status >= 200 && res.status < 300) {

@@ -33,7 +33,7 @@ module.exports = async function (context) {
             msg => {
 
                 serviceBusService.sendTopicMessage(
-                    'serviceCallbackTopic',
+                    'servicecallbacktopic',
                     msg,
                     errorFunction
                 );
@@ -44,7 +44,7 @@ module.exports = async function (context) {
     function fetchAllMessagesThenRetryThem() {
 
         serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock : true}, function (error, msg) {
-
+            
             if (error) {
 
                 if (error === "No messages to receive") {

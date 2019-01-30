@@ -17,7 +17,7 @@ module "function_app" {
   resource_group_name = "${local.rg_name}"
   account_replication_type = "LRS"
   function_app_name = "${local.func_app_name}"
-  plan_type = "consumption"
+  asp_id = "${data.terraform_remote_state.shared_infra.app_service_plan_id}"
   common_tags = "${var.common_tags}"
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"

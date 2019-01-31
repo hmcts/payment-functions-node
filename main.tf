@@ -1,3 +1,6 @@
+provider "azurerm" {
+  version = "1.19.0"
+}
 locals {
   rg_name = "ccpay-${var.env}"
   asp_resource_id = "${data.terraform_remote_state.shared_infra.app_service_plan_id}"

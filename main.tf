@@ -13,7 +13,7 @@ resource "azurerm_application_insights" "appinsights" {
 }
 
 module "function_app" {
-  source = "git@github.com:hmcts/ccpay-module-function?ref=shared_asp"
+  source = "git@github.com:hmcts/ccpay-module-function?ref=master"
   env = "${var.env}"
   location = "${var.location}"
   resource_group_name = "${local.rg_name}"

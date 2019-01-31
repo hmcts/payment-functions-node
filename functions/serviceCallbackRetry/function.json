@@ -1,0 +1,11 @@
+{
+  "bindings": [
+    {
+      "schedule": "0 */1 * * * *",
+      "name": "failedMessagesTimerTrigger",
+      "type": "timerTrigger",
+      "direction": "in"
+    }
+  ],
+  "disabled": false
+}

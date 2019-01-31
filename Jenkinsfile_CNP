@@ -6,10 +6,10 @@ import uk.gov.hmcts.contino.Environment
 
 Environment environment = new Environment(env)
 
-def product = "payment-func"
+def product = "payment"
 
 onMaster {
-  withInfrastructurePipeline('product, environment.nonProdName, 'nonprod')
+  withInfrastructurePipeline(product, environment.nonProdName, 'nonprod')
   withInfrastructurePipeline(product, environment.prodName, 'prod')
 }
 

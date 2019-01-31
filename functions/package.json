@@ -14,7 +14,8 @@
     "test": "mocha test/*.js"
   },
   "dependencies": {
-    "superagent": "^3.8.2"
+    "superagent": "^3.8.2",
+    "azure-sb": "latest"
   },
   "devDependencies": {
     "body-parser": "^1.18.3",

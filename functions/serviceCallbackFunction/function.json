@@ -2,7 +2,7 @@
   "bindings": [
     {
       "topicName": "serviceCallbackTopic",
-      "subscriptionName" : "defaultServiceCallbackSubscription",
+      "subscriptionName": "defaultServiceCallbackSubscription",
       "connection": "ServiceCallbackBusConnection",
       "name": "serviceCallback",
       "type": "serviceBusTrigger",

@@ -1,11 +1,12 @@
 locals {
   rg_name = "ccpay-${var.env}"
   asp_resource_id = "${data.terraform_remote_state.shared_infra.app_service_plan_id}"
-  func_app_name = "payment-node-${var.env}"
+  func_app_name = "${var.product}-node-${var.env}"
+
 }
 
 resource "azurerm_application_insights" "appinsights" {
-  name                = "${var.product}-${var.env}"
+  name                = "${var.product}-func-${var.env}"
   location            = "West Europe"
   resource_group_name = "${local.rg_name}"
   application_type    = "Web"

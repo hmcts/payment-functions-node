@@ -22,31 +22,31 @@ node {
     }
 
     onMaster {
-         withSubscription(subscription) {
-                withIlbIp(environment) {
-                    spinInfra(product, component, environment, false, subscription)
+         withSubscription(subscription.nonProdName) {
+                withIlbIp(environment.nonProdName) {
+                    spinInfra(product, component, environment.nonProdName, false, subscription.nonProdName)
                     scmServiceRegistration(environment.nonProdName)
                 }
-                deployStage(product, component, environment, subscription)
+                deployStage(product, component, environment.nonProdName, subscription.nonProdName)
             }
 
-         withSubscription(subscription) {
-                withIlbIp(environment) {
-                    spinInfra(product, component, environment, false, subscription)
-                    scmServiceRegistration(environment.nonProdName)
+         withSubscription(subscription.prodName) {
+                withIlbIp(environment.prodName) {
+                    spinInfra(product, component, environment.prodName, false, subscription.prodName)
+                    scmServiceRegistration(environment.prodName)
                 }
-                deployStage(product, component, environment, subscription)
+                deployStage(product, component, environment.prodName, subscription.prodName)
             }
 
     }
 
     onDemo {
-        withSubscription(subscription) {
-               withIlbIp(environment) {
-                   spinInfra(product, component, environment, false, subscription)
-                   scmServiceRegistration(environment.nonProdName)
+        withSubscription(subscription.demoName) {
+               withIlbIp(environment.demoName) {
+                   spinInfra(product, component, environment.demoName, false, subscription.demoName)
+                   scmServiceRegistration(environment.demoName)
                }
-               deployStage(product, component, environment, subscription)
+               deployStage(product, component, environment.demoName, subscription.demoName)
            }
     }
 }

@@ -28,7 +28,7 @@ node {
     withSubscription(subscription) {
            withIlbIp(environment) {
                spinInfra(product, component, environment, false, subscription)
-               scmServiceRegistration(environment.nonProdName)
+               scmServiceRegistration(environment)
            }
            deployStage(product, component, environment, subscription)
        }

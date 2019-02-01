@@ -22,36 +22,32 @@ node {
     }
 
     onMaster {
-        deployToEnvironment(
-                product: product,
-                component: component,
-                environment: environment.nonProdName,
-                subscription: subscription.nonProdName)
+         withSubscription(subscription) {
+                withIlbIp(environment) {
+                    spinInfra(product, component, environment, false, subscription)
+                    scmServiceRegistration(environment.nonProdName)
+                }
+                deployStage(product, component, environment, subscription)
+            }
 
-        deployToEnvironment(
-                product: product,
-                component: component,
-                environment: environment.prodName,
-                subscription: subscription.prodName)
+         withSubscription(subscription) {
+                withIlbIp(environment) {
+                    spinInfra(product, component, environment, false, subscription)
+                    scmServiceRegistration(environment.nonProdName)
+                }
+                deployStage(product, component, environment, subscription)
+            }
 
     }
 
     onDemo {
-        deployToEnvironment(
-                product: product,
-                component: component,
-                environment: environment.demoName,
-                subscription: subscription.demoName)
-    }
-}
-
-def deployToEnvironment(product, component, environment, subscription) {
-    withSubscription(subscription) {
-        withIlbIp(environment) {
-            spinInfra(product, component, environment, false, subscription)
-            scmServiceRegistration(environment.nonProdName)
-        }
-        deployStage(product, component, environment, subscription)
+        withSubscription(subscription) {
+               withIlbIp(environment) {
+                   spinInfra(product, component, environment, false, subscription)
+                   scmServiceRegistration(environment.nonProdName)
+               }
+               deployStage(product, component, environment, subscription)
+           }
     }
 }
 

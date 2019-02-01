@@ -25,17 +25,13 @@ node {
     stage('Build') {
         yarn("--mutex network install")
     }
-    deployToEnvironment(product, component, environment, subscription)
-}
-
-def deployToEnvironment(product, component, environment, subscription) {
     withSubscription(subscription) {
-        withIlbIp(environment) {
-            spinInfra(product, component, environment, false, subscription)
-            scmServiceRegistration(environment.nonProdName)
-        }
-        deployStage(product, component, environment, subscription)
-    }
+           withIlbIp(environment) {
+               spinInfra(product, component, environment, false, subscription)
+               scmServiceRegistration(environment.nonProdName)
+           }
+           deployStage(product, component, environment, subscription)
+       }
 }
 
 def deployStage(product, component, environment, subscription) {

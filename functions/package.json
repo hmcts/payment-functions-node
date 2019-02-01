@@ -4,12 +4,12 @@
   "private": true,
   "main": "index.js",
   "engines": {
-    "node": "8.11.1"
+    "node": ">8.9.4"
   },
   "scripts": {
     "start": "node index.js",
     "local": "func host start --debug",
-    "deploy": "func azure functionapp publish payments-functions-node",
+    "deploy": "func azure functionapp publish ccpay-functions-node",
     "setup": "func extensions install",
     "test": "mocha test/*.js"
   },

@@ -7,7 +7,7 @@ locals {
 }
 
 module "function_app" {
-  source = "git@github.com:hmcts/ccpay-module-function?ref=asp_with_dns"
+  source = "git@github.com:hmcts/ccpay-module-function?ref=master"
   env = "${var.env}"
   product = "${var.product}-${var.component}"
   ilbIp = "${var.ilbIp}"

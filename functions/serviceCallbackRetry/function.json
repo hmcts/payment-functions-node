@@ -1,7 +1,7 @@
 {
   "bindings": [
     {
-      "schedule": "0 */1 * * * *",
+      "schedule": "RetrySchedule",
       "name": "failedMessagesTimerTrigger",
       "type": "timerTrigger",
       "direction": "in"

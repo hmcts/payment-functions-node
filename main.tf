@@ -18,5 +18,6 @@ module "function_app" {
   common_tags = "${var.common_tags}"
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
+    RetrySchedule = "${var.retry_schedule}"
   }
 }

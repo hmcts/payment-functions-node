@@ -6,10 +6,12 @@ const azure = require('azure-sb');
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
-    context.log('Retrry trigered');
+    context.log('Retry trigered');
     const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
 
+    context.log('before hasMessage');
     var hasMessage = true;
+    context.log('before do while loop');
     do {
         context.log('Retry do while loop');
         serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {

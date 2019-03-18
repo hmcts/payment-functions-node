@@ -6,11 +6,12 @@ const azure = require('azure-sb');
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
+    context.log('Retrry trigered');
     const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
 
-    var noMessages = false;
-
-    while (!noMessages) {
+    var hasMessage = true;
+    do {
+        context.log('Retry do while loop');
         serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
             if (!error) {
                 // Message received and locked
@@ -19,13 +20,14 @@ module.exports = async function (context) {
                 });
             } else {
                 context.log.error("Either no messages to receive or error fetching retry message:", error);
-                noMessages = true;
+                hasMessage = false;
             }
         });
-    }
+    } while (hasMessage)
 };
 
 function processMessage(msg, context, serviceBusService) {
+    context.log('processMessage');
     if (!msg.customProperties.retries) {
         msg.customProperties.retries = 0;
     }

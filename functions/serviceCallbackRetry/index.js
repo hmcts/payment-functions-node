@@ -6,30 +6,28 @@ const azure = require('azure-sb');
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
-    context.log('Retry trigered');
     const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
 
-    context.log('before hasMessage');
-    var hasMessage = true;
-    context.log('before do while loop');
-    do {
-        context.log('Retry do while loop');
-        serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
-            if (!error) {
-                // Message received and locked
-                processMessage(msg, context, serviceBusService);
-                serviceBusService.deleteMessage(msg, function (deleteError) {
-                });
-            } else {
-                context.log.error("Either no messages to receive or error fetching retry message:", error);
-                hasMessage = false;
-            }
+    async function retrieveQueueMessage(context, serviceBusService) {
+        context.log("Trying to retrieve message from retry queue");
+        return new Promise((resolve, reject) => {
+            serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
+                if (!error) {
+                    processMessage(msg, context, serviceBusService);
+                    retrieveQueueMessage(context); // try again for new messages
+                    resolve();
+                } else {
+                    context.log.error("Either no messages to receive or error fetching retry message. Error is:", error);
+                    reject();
+                }
+            });
         });
-    } while (hasMessage)
+    }
+
+    await retrieveQueueMessage(context, serviceBusService);
 };
 
 function processMessage(msg, context, serviceBusService) {
-    context.log('processMessage');
     if (!msg.customProperties.retries) {
         msg.customProperties.retries = 0;
     }
@@ -49,5 +47,7 @@ function processMessage(msg, context, serviceBusService) {
             }
         });
     }
+    // delete locked message from Queue
+    serviceBusService.deleteMessage(msg, function (deleteError) {
+    });
 }
-

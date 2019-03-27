@@ -1,79 +1,53 @@
 /* Using non binding API as described in
   https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-nodejs-how-to-use-queues
-  https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-nodejs-how-to-use-topics-subscriptions
 */
 const azure = require('azure-sb');
 
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
-
     const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
 
-    const receivedMessages = [];
-
-    const errorFunction = function (error) {
-        if (error) {
-            context.log.error("Error", error);
-        }
-    };
-
-    function sendMessageToDeadLetter(msg) {
-        context.log.error("Max number of retries reached for " + JSON.stringify(msg));
-        context.log.error("Message Discarded");
-        //TODO: Find an alternative to do this
-        //serviceBusService.sendQueueMessage('serviceCallbackRetryQueue/$DeadLetterQueue', msg, errorFunction);
-    }
-
-    function sendRetryMessages() {
-
-        context.log.error("Received " + receivedMessages.length + " messages");
-
-        receivedMessages.forEach(
-            msg => {
-
-                serviceBusService.sendTopicMessage(
-                    'servicecallbacktopic',
-                    msg,
-                    errorFunction
-                );
-            }
-        );
-    }
-
-    function fetchAllMessagesThenRetryThem() {
-
-        serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock : true}, function (error, msg) {
-            
-            if (error) {
-
-                if (error === "No messages to receive") {
-                    sendRetryMessages();
-                    return;
+    async function retrieveQueueMessage(context, serviceBusService) {
+        context.log("Trying to retrieve message from retry queue");
+        return new Promise((resolve, reject) => {
+            serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
+                if (!error) {
+                    processMessage(msg, context, serviceBusService);
+                    retrieveQueueMessage(context); // try again for new messages
+                    resolve();
+                } else {
+                    context.log.error("Either no messages to receive or error fetching retry message. Error is:", error);
+                    reject();
                 }
-
-                return errorFunction(error);
-            }
-
-            if (!msg.customProperties.retries) {
-                msg.customProperties.retries = 0;
-            }
-
-            if (msg.customProperties.retries === MAX_RETRIES) {
-                sendMessageToDeadLetter(msg);
-            }else{
-                delete msg.customProperties.deadletterreason;
-
-                delete msg.customProperties.deadlettererrordescription;
-
-                msg.customProperties.retries++;
-
-                receivedMessages.push(msg);
-            }
-
-            return fetchAllMessagesThenRetryThem();
+            });
         });
     }
 
-    fetchAllMessagesThenRetryThem();
+    await retrieveQueueMessage(context, serviceBusService);
 };
+
+function processMessage(msg, context, serviceBusService) {
+    if (!msg.customProperties.retries) {
+        msg.customProperties.retries = 0;
+    }
+    if (msg.customProperties.retries === MAX_RETRIES) {
+        context.log.error("Max number of retries reached for " + JSON.stringify(msg));
+        serviceBusService.sendQueueMessage('serviceCallbackRetryQueue/$DeadLetterQueue', msg, function (error) {
+        });
+    } else {
+        delete msg.customProperties.deadletterreason;
+        delete msg.customProperties.deadlettererrordescription;
+
+        msg.customProperties.retries++;
+
+        serviceBusService.sendTopicMessage('servicecallbacktopic', msg, function (error) {
+            if (error) {
+                context.log.error("Error sending topic message", error);
+            }
+        });
+    }
+    // delete locked message from Queue
+    serviceBusService.deleteMessage(msg, function (deleteError) {
+    });
+}

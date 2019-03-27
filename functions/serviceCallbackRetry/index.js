@@ -14,7 +14,7 @@ module.exports = async function (context) {
             serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
                 if (!error) {
                     processMessage(msg, context, serviceBusService);
-                    retrieveQueueMessage(context); // try again for new messages
+                    retrieveQueueMessage(context, serviceBusService); // try again for new messages
                     resolve();
                 } else {
                     context.log.error("Either no messages to receive or error fetching retry message. Error is:", error);

@@ -18,7 +18,7 @@ module.exports = async function (context) {
                     retrieveQueueMessage(context, serviceBusService); // try again for new messages
                     resolve();
                 } else if (error === "No messages to receive") {
-                    sendRetryMessagesToTopic(receivedMessages);
+                    sendRetryMessagesToTopic(context, receivedMessages);
                     resolve();
                 } else {
                     context.log.error("Error fetching retry message. Error is:", error);

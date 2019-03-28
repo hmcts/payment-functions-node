@@ -33,6 +33,6 @@ variable "common_tags" {
 
 
 variable "retry_schedule" {
-  default = "0 */2 * * * *"
+  default = "0 */5 * * * *"
 }
 

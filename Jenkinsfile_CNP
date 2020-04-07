@@ -23,7 +23,7 @@ node {
 
     onMaster {
          withSubscription(subscription.nonProdName) {
-                withIlbIp(environment.nonProdName) {
+                withIlbIp(subscription.nonProdName, environment.nonProdName) {
                     spinInfra(product, component, environment.nonProdName, false, subscription.nonProdName)
                     scmServiceRegistration(environment.nonProdName)
                 }
@@ -31,7 +31,7 @@ node {
             }
 
          withSubscription(subscription.prodName) {
-                withIlbIp(environment.prodName) {
+                withIlbIp(subscription.prodName, environment.prodName) {
                     spinInfra(product, component, environment.prodName, false, subscription.prodName)
                     scmServiceRegistration(environment.prodName)
                 }
@@ -42,7 +42,7 @@ node {
 
     onDemo {
         withSubscription(subscription.demoName) {
-               withIlbIp(environment.demoName) {
+               withIlbIp(subscription.demoName, environment.demoName) {
                    spinInfra(product, component, environment.demoName, false, subscription.demoName)
                    scmServiceRegistration(environment.demoName)
                }

@@ -15,7 +15,7 @@ node {
     env.PATH = "$env.PATH:/usr/local/bin"
     stage('Checkout') {
         deleteDir()
-        checkout scm
+        checkoutScm()
     }
     stage('Build') {
         yarn("--mutex network install")

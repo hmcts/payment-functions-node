@@ -1,5 +1,6 @@
 const request = require('superagent');
 const otp = require('otp');
+const req = require('request-promise-native');
 
 module.exports = async function (context, mySbMsg) {
     context.log('Received callback message: ', JSON.stringify(mySbMsg));
@@ -47,6 +48,7 @@ module.exports = async function (context, mySbMsg) {
             oneTimePassword: otpPassword
         };
         context.log.info('I am here-----11 ' + ' otpPassword : ' + otpPassword);
+        /*
         const resp = await request
             .post(s2sUrl + '/lease')
             .set('Accept', 'application/json')
@@ -67,6 +69,31 @@ module.exports = async function (context, mySbMsg) {
             context.log.error('Error response received from callback provider: ' + res.status);
             throw new Error("Response was not 2xx but " + res.status);
         }
+        */
+       req.post({
+        uri: s2sUrl + '/lease',
+        body: serviceAuthRequest,
+        json: true
+    })
+        .then(token => {
+            context.log.info(' S2S Token : ' + token);
+            req.put({
+                uri: serviceCallbackUrl,
+                headers: {
+                            ServiceAuthorization: token,
+                            'Content-Type': 'application/json'
+                          },
+                json: true,
+                body: mySbMsg
+            }).then(response => {
+                context.log.info('I am here-----13 ' + serviceCallbackUrl + ' Response : ' + JSON.stringify(response))   
+            })
+            .catch(error => {
+                context.log.info('Error in Calling Service ' + error.message + error.response);    
+            })
+        }).catch(error => {
+            context.log.info('Error in fetching S2S token ' + error.message + error.response);
+        });
     } catch (error) {
         context.log.info('I am here-----16 ' + error.message + error.response);
     }

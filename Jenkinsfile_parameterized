@@ -26,9 +26,9 @@ node {
         yarn("--mutex network install")
     }
     withSubscription(subscription) {
-           withIlbIp(environment) {
+           withIlbIp(subscription, environment) {
                spinInfra(product, component, environment, false, subscription)
-               scmServiceRegistration(environment)
+               scmServiceRegistration(subscription, environment)
            }
            deployStage(product, component, environment, subscription)
        }

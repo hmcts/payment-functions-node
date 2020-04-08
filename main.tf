@@ -14,7 +14,7 @@ module "function_app" {
   subscription = "${var.subscription}"
   location = "${var.location}"
   account_replication_type = "LRS"
-  asp_resource_id = "${data.azurerm_app_service_plan.asp_resource_id}"
+  asp_resource_id = "${data.azurerm_app_service_plan.asp_resource_id.id}"
   common_tags = "${var.common_tags}"
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"

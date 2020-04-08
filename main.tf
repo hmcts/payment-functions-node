@@ -23,7 +23,7 @@ module "function_app" {
 }
 
 data "azurerm_app_service_plan" "asp_resource_id" {
-  name                = "terraform_remote_state.shared_infra"
+  name = "ccpay-${var.env}"
   resource_group_name = "ccpay-${var.env}"
 }
 

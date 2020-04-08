@@ -2,7 +2,7 @@ const request = require('superagent');
 const otp = require('otp');
 const req = require('request-promise-native');
 
-module.exports = async function (context, mySbMsg) {
+module.exports = function (context, mySbMsg) {
     context.log('Received callback message: ', JSON.stringify(mySbMsg));
     context.log('I am here-----0 ' + "s2s_url: " + process.env["s2s_url"]);
     context.log('I am here-----0 ' + "s2s_key: " + process.env["s2s_key"]);
@@ -31,17 +31,17 @@ module.exports = async function (context, mySbMsg) {
     }
     context.log.info('I am here-----1 ' + serviceCallbackUrl);
     try {
-
+        
         const s2sUrl = process.env["s2s_url"];
         const ccpayBubbleSecret = process.env["s2s_key"];
         const microService = process.env["ccpaybubble_microservice"];
-
+        
         /*
-        const s2sUrl = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal';
-        //const s2sUrl_local = 'http://localhost:23443';
+        const s2sUrl = 'http://localhost:23443';
         const ccpayBubbleSecret = 'G5XTFNBUW4P6ZP4F';
         const microService = 'ccpay_bubble';
         */
+
         const otpPassword = otp({ secret: ccpayBubbleSecret }).totp();
         const serviceAuthRequest = {
             microservice: microService,
@@ -71,7 +71,7 @@ module.exports = async function (context, mySbMsg) {
         }
         */
        req.post({
-        uri: '${s2sUrl}/lease',
+        uri: s2sUrl + '/lease',
         body: serviceAuthRequest,
         json: true
     })
@@ -80,7 +80,7 @@ module.exports = async function (context, mySbMsg) {
             req.put({
                 uri: serviceCallbackUrl,
                 headers: {
-                            ServiceAuthorization: 'Bearer ${token}',
+                            ServiceAuthorization: 'Bearer ' + token,
                             'Content-Type': 'application/json'
                           },
                 json: true,
@@ -94,6 +94,25 @@ module.exports = async function (context, mySbMsg) {
         }).catch(error => {
             context.log.info('Error in fetching S2S token ' + error.message + error.response);
         });
+        //----
+        /*
+        const res = await request
+            .put(serviceCallbackUrl)
+            .set('Accept', 'application/json')
+            .set('ServiceAuthorization', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjbWMiLCJleHAiOjE1MzMyMzc3NjN9.3iwg2cCa1_G9-TAMupqsQsIVBMWg9ORGir5xZyPhDabk09Ldk0-oQgDQq735TjDQzPI8AxL1PgjtOPDKeKyxfg[akiss@reformMgmtDevBastion02')
+            .send(mySbMsg);
+        context.log.info('I am here-----13 ' + serviceCallbackUrl + ' Response : ' + res.status);
+
+        if (res.status >= 200 && res.status < 300) {
+            context.log.info('I am here-----14 ' + serviceCallbackUrl);
+            context.log.info('Message Sent Successfully to ' + serviceCallbackUrl);
+        } else {
+            context.log.info('I am here-----15 ' + serviceCallbackUrl);
+            context.log.error('Error response received from callback provider: ' + res.status);
+            throw new Error("Response was not 2xx but " + res.status);
+        }
+        */
+        //-----
     } catch (error) {
         context.log.info('I am here-----16 ' + error.message + error.response);
     }

@@ -31,9 +31,9 @@ module.exports = async function (context, mySbMsg) {
     context.log.info('I am here-----1 ' + serviceCallbackUrl);
     try {
 
-        const s2sUrl = config.get('s2s_url');
-        const ccpayBubbleSecret = config.get('s2s_key');
-        const microService = config.get('ccpaybubble_microservice');
+        const s2sUrl = process.env["s2s_url"];
+        const ccpayBubbleSecret = process.env["s2s_key"];
+        const microService = process.env["ccpaybubble_microservice"];
 
         /*
         const s2sUrl = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal';

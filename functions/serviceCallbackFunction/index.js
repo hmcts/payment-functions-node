@@ -46,6 +46,7 @@ module.exports = async function (context, mySbMsg) {
             microservice: microService,
             oneTimePassword: otpPassword
         };
+        context.log.info('I am here-----11 ' + ' otpPassword : ' + otpPassword);
         const resp = await request
             .post(s2sUrl + '/lease')
             .set('Accept', 'application/json')

@@ -19,6 +19,9 @@ module "function_app" {
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
     RetrySchedule = "${var.retry_schedule}"
+    ccpaybubble_microservice = "ccpay_bubble"
+    s2s_key = "G5XTFNBUW4P6ZP4F"
+    s2s_url = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
   }
 }
 

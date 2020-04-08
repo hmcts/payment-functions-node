@@ -21,7 +21,7 @@ module "function_app" {
     RetrySchedule = "${var.retry_schedule}"
     ccpaybubble_microservice = "ccpay_bubble"
     s2s_key = "G5XTFNBUW4P6ZP4F"
-    s2s_url = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    s2s_url = "http://rpe-service-auth-provider-demo.service.core-compute-demo.internal"
   }
 }
 

@@ -71,22 +71,22 @@ module.exports = async function (context, mySbMsg) {
         }
         */
        req.post({
-        uri: s2sUrl + '/lease',
+        uri: '${s2sUrl}/lease',
         body: serviceAuthRequest,
         json: true
     })
         .then(token => {
-            context.log.info(' S2S Token : ' + token);
+            context.log.info('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
             req.put({
                 uri: serviceCallbackUrl,
                 headers: {
-                            ServiceAuthorization: token,
+                            ServiceAuthorization: 'Bearer ${token}',
                             'Content-Type': 'application/json'
                           },
                 json: true,
                 body: mySbMsg
             }).then(response => {
-                context.log.info('I am here-----13 ' + serviceCallbackUrl + ' Response : ' + JSON.stringify(response))   
+                context.log.info('I am here-----13 ' + serviceCallbackUrl + ' Response : ' + JSON.stringify(response));   
             })
             .catch(error => {
                 context.log.info('Error in Calling Service ' + error.message + error.response);    

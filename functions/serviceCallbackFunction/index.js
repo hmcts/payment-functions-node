@@ -52,11 +52,11 @@ module.exports = function (context, mySbMsg) {
             s2sSecret = process.env["s2s_key_cmc"];
             microService = process.env["microservice_cmc"];
         } else if (serviceName == "Divorce") {
-            s2sSecret = process.env["s2s_key_divorce-frontend"];
-            microService = process.env["microservice_divorce-frontend"];
+            s2sSecret = process.env["s2s_key_divorce_frontend"];
+            microService = process.env["microservice_divorce_frontend"];
         } else if (serviceName == "Probate") {
-            s2sSecret = process.env["s2s_key_probate-frontend"];
-            microService = process.env["microservice_probate-frontend"];
+            s2sSecret = process.env["s2s_key_probate_frontend"];
+            microService = process.env["microservice_probate_frontend"];
         }
 
         context.log.info('I am here-----1 s2sSecret ' + s2sSecret);

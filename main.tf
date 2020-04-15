@@ -44,11 +44,11 @@ data "azurerm_key_vault_secret" "s2s_key_cmc" {
 }
 
 data "azurerm_key_vault_secret" "s2s_key_divorce_frontend" {
-  name      = "microservicekey-divorce_frontend"
+  name      = "microservicekey-divorce-frontend"
   vault_uri = "https://s2s-${var.env}.vault.azure.net/"
 }
 
 data "azurerm_key_vault_secret" "s2s_key_probate_frontend" {
-  name      = "microservicekey-probate_frontend"
+  name      = "microservicekey-probate-frontend"
   vault_uri = "https://s2s-${var.env}.vault.azure.net/"
 }

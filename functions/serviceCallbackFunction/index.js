@@ -5,8 +5,9 @@ const req = require('request-promise-native');
 module.exports = function (context, mySbMsg) {
     context.log('Received callback message: ', JSON.stringify(mySbMsg));
     context.log('I am here-----0 ' + "s2s_url: " + process.env["s2s_url"]);
-    context.log('I am here-----0 ' + "s2s_key: " + process.env["s2s_key"]);
-    context.log('I am here-----0 ' + "ccpaybubble_microservice: " + process.env["ccpaybubble_microservice"]);
+
+    var s2sSecret;
+    var microService;
 
     if (!mySbMsg) {
         context.log.error('No body received');
@@ -27,16 +28,41 @@ module.exports = function (context, mySbMsg) {
             context.log.error('No service callback url...');
             return;
         }
-
     }
+
+    let serviceName = context.bindings.serviceCallback.service_name;
+
+    if (!serviceName) {
+        serviceName = context.bindingData.service_name;
+
+        if (!serviceName) {
+            context.log.error('No service name to callback...');
+            return;
+        }
+    }
+
     context.log.info('I am here-----1 ' + serviceCallbackUrl);
+    context.log.info('I am here-----1 ' + serviceName);
+
     try {
 
         const s2sUrl = process.env["s2s_url"];
-        const ccpayBubbleSecret = process.env["s2s_key"];
-        const microService = process.env["ccpaybubble_microservice"];
 
-        const otpPassword = otp({ secret: ccpayBubbleSecret }).totp();
+        if (serviceName == "Civil Money Claims") {
+            s2sSecret = process.env["s2s_key_cmc"];
+            microService = process.env["microservice_cmc"];
+        } else if (serviceName == "Divorce") {
+            s2sSecret = process.env["s2s_key_divorce-frontend"];
+            microService = process.env["microservice_divorce-frontend"];
+        } else if (serviceName == "Probate") {
+            s2sSecret = process.env["s2s_key_probate-frontend"];
+            microService = process.env["microservice_probate-frontend"];
+        }
+
+        context.log.info('I am here-----1 s2sSecret ' + s2sSecret);
+        context.log.info('I am here-----1 microService ' + microService);
+
+        const otpPassword = otp({ secret: s2sSecret }).totp();
         const serviceAuthRequest = {
             microservice: microService,
             oneTimePassword: otpPassword

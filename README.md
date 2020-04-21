@@ -83,22 +83,6 @@ function as template_
 
 Run the below Java Client to publish message to Service Bus Topic
 
-import com.microsoft.azure.servicebus.Message;
-import org.codehaus.jackson.map.ObjectMapper;
-import uk.gov.hmcts.payment.api.componenttests.util.PaymentsDataUtil;
-import uk.gov.hmcts.payment.api.contract.PaymentDto;
-import uk.gov.hmcts.payment.api.dto.mapper.PaymentDtoMapper;
-import uk.gov.hmcts.payment.api.model.*;
-import uk.gov.hmcts.payment.api.servicebus.TopicClientProxy;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static uk.gov.hmcts.payment.api.model.Payment.paymentWith;
-
 public class SendMessageApplication {
 
     public static void main(String[] args) throws Exception{

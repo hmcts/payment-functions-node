@@ -6,7 +6,6 @@ let proxyquire = require('proxyquire');
 let expect = chai.expect;
 let sinonChai = require('sinon-chai');
 let URL = require('url');
-const path = require('path');
 
 chai.use(sinonChai);
 
@@ -21,7 +20,7 @@ beforeEach(function () {
     request.set = sinon.stub().returns(request);
     request.send = sinon.stub().returns(request);
 
-    serviceCallbackFunction = proxyquire(path.resolve(__dirname,'../ServiceCallbackFunction/index.js'),
+    serviceCallbackFunction = proxyquire('../ServiceCallbackFunction',
         {
             'superagent': request,
         }

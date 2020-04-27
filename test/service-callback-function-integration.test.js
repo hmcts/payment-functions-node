@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 const PORT = 4872;
 
-const serviceCallbackFunction = require('../ServiceCallbackFunction');
+const serviceCallbackFunction = require('../ServiceCallbackFunction/index.js');
 
 let context, bindingData;
 

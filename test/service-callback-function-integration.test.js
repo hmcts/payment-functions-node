@@ -20,7 +20,7 @@ let serverCalled = false;
 
 let receivedBody = {};
 
-app.patch('/', (req, res) => {
+app.put('/', (req, res) => {
 
     serverCalled = true;
     receivedBody = req.body;

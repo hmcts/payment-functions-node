@@ -10,7 +10,7 @@ module.exports = async function (context) {
     const retryMessages = [];
 
     function sendRetryMessagesToTopic(context) {
-        context.log("Received " + retryMessages.length + " messages");
+        context.log.info("Received " + retryMessages.length + " messages");
         retryMessages.forEach(
             msg => {
                 serviceBusService.sendTopicMessage('servicecallbacktopic', msg, function (error) {
@@ -23,7 +23,7 @@ module.exports = async function (context) {
     }
 
     async function retrieveQueueMessage(context) {
-        context.log("Trying to retrieve message from retry queue");
+        context.log.info("Trying to retrieve message from retry queue");
         return new Promise((resolve, reject) => {
             serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
                 if (!error) {

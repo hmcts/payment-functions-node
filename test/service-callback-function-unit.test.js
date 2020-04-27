@@ -20,7 +20,7 @@ beforeEach(function () {
     request.set = sinon.stub().returns(request);
     request.send = sinon.stub().returns(request);
 
-    serviceCallbackFunction = proxyquire('../ServiceCallbackFunction',
+    serviceCallbackFunction = proxyquire('../serviceCallbackFunction/index.js',
         {
             'superagent': request,
         }

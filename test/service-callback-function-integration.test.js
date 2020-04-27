@@ -1,4 +1,5 @@
 'use strict';
+const path = require('path');
 
 let expect = require('chai').expect;
 
@@ -12,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 const PORT = 4872;
 
-let serviceCallbackFunction = require('../ServiceCallbackFunction/index.js');
+const serviceCallbackFunction = require(path.resolve(__dirname, '../ServiceCallbackFunction/index.js'));
 
 let context, bindingData;
 

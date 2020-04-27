@@ -4,27 +4,27 @@
   "private": true,
   "main": "index.js",
   "engines": {
-    "node": "8.11.1"
+    "node": ">=12.16.2"
   },
   "scripts": {
     "start": "node index.js",
-    "local": "func host start --debug",
+    "local": "func host start",
     "deploy": "func azure functionapp publish ccpay-functions-node",
     "setup": "func extensions install",
     "test": "mocha test/*.js"
   },
   "dependencies": {
-    "superagent": "^3.8.2",
-    "azure-sb": "latest"
+    "azure-sb": "^0.11.1",
+    "superagent": "^5.2.2"
   },
   "devDependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.19.0",
     "chai": "^4.2.0",
-    "debug": "^4.1.0",
-    "express": "^4.16.4",
-    "mocha": "^5.2.0",
-    "proxyquire": "^2.1.0",
-    "sinon": "^5.0.1-next.1",
-    "sinon-chai": "^3.2.0"
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "mocha": "^7.1.1",
+    "proxyquire": "^2.1.3",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0"
   }
 }

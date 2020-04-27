@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "topicName": "serviceCallbackTopic",
+      "subscriptionName": "defaultServiceCallbackSubscription",
+      "connection": "ServiceCallbackBusConnection",
+      "name": "serviceCallback",
+      "type": "serviceBusTrigger",
+      "direction": "in"
+    }
+  ],
+  "disabled": false
+}

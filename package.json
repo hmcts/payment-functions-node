@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "engines": {
-    "node": ">=12.16.2"
+    "node": ">=12.16.1"
   },
   "scripts": {
     "start": "node index.js",

@@ -1,2 +1,4 @@
 function:
   replicas: 1
+blobstorage:
+  enabled: false

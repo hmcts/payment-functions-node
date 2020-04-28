@@ -1,3 +1,23 @@
 function:
   # Don't modify below here
   image: ${IMAGE_NAME}
+  environment:
+    AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
+  secrets:
+    STORAGE_ACCOUNT_NAME:
+      secretRef: storage-secret-example-{{ .Release.Name }}
+      key: storageAccountName
+    STORAGE_ACCESS_KEY:
+      secretRef: storage-secret-example-{{ .Release.Name }}
+      key: accessKey
+    STORAGE_SERVICE_ENDPOINT:
+      secretRef: storage-secret-example-{{ .Release.Name }}
+      key: primaryBlobServiceEndPoint
+blobstorage:
+  resourceGroup: fees-pay-rg
+  teamName: "Fees Pay"
+  location: ukwest
+  setup:
+    containers:
+      - feespay-function
+  enabled: true

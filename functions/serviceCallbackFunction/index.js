@@ -6,9 +6,6 @@ module.exports = function (context, mySbMsg) {
     context.log('Received callback message: ', JSON.stringify(mySbMsg));
     context.log('I am here-----0 ' + "s2s_url: " + process.env["s2s_url"]);
 
-    var s2sSecret;
-    var microService;
-
     if (!mySbMsg) {
         context.log.error('No body received');
         return;
@@ -47,17 +44,8 @@ module.exports = function (context, mySbMsg) {
     try {
 
         const s2sUrl = process.env["s2s_url"];
-
-        if (serviceName == "Civil Money Claims") {
-            s2sSecret = process.env["s2s_key_cmc"];
-            microService = process.env["microservice_cmc"];
-        } else if (serviceName == "Divorce") {
-            s2sSecret = process.env["s2s_key_divorce_frontend"];
-            microService = process.env["microservice_divorce_frontend"];
-        } else if (serviceName == "Probate") {
-            s2sSecret = process.env["s2s_key_probate_frontend"];
-            microService = process.env["microservice_probate_frontend"];
-        }
+        const s2sSecret = process.env["s2s_key_payment_app"];
+        const microService = process.env["microservice_payment_app"];
 
         context.log.info('I am here-----1 s2sSecret ' + s2sSecret);
         context.log.info('I am here-----1 microService ' + microService);
@@ -78,7 +66,7 @@ module.exports = function (context, mySbMsg) {
                 req.put({
                     uri: serviceCallbackUrl,
                     headers: {
-                        ServiceAuthorization: 'Bearer ' + token,
+                        ServiceAuthorization: token,
                         'Content-Type': 'application/json'
                     },
                     json: true,

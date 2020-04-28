@@ -23,12 +23,8 @@ module "function_app" {
   app_settings = {
     ServiceCallbackBusConnection="${data.terraform_remote_state.shared_infra.sb_primary_send_and_listen_connection_string}"
     RetrySchedule = "${var.retry_schedule}"
-    microservice_cmc = "cmc"
-    microservice_divorce_frontend = "divorce_frontend"
-    microservice_probate_frontend = "probate_frontend"
-    s2s_key_cmc = "${data.azurerm_key_vault_secret.s2s_key_cmc.value}"
-    s2s_key_divorce_frontend = "${data.azurerm_key_vault_secret.s2s_key_divorce_frontend.value}"
-    s2s_key_probate_frontend = "${data.azurerm_key_vault_secret.s2s_key_probate_frontend.value}"
+    microservice_payment_app = "payment_app"
+    s2s_key_payment_app = "${data.azurerm_key_vault_secret.s2s_key_payment_app.value}"
     s2s_url = "${local.s2sUrl}"
   }
 }
@@ -38,17 +34,7 @@ data "azurerm_app_service_plan" "asp_resource_id" {
   resource_group_name = "ccpay-${var.env}"
 }
 
-data "azurerm_key_vault_secret" "s2s_key_cmc" {
-  name      = "microservicekey-cmc"
-  vault_uri = "https://s2s-${var.env}.vault.azure.net/"
-}
-
-data "azurerm_key_vault_secret" "s2s_key_divorce_frontend" {
-  name      = "microservicekey-divorce-frontend"
-  vault_uri = "https://s2s-${var.env}.vault.azure.net/"
-}
-
-data "azurerm_key_vault_secret" "s2s_key_probate_frontend" {
-  name      = "microservicekey-probate-frontend"
+data "azurerm_key_vault_secret" "s2s_key_payment_app" {
+  name      = "microservicekey-payment-app"
   vault_uri = "https://s2s-${var.env}.vault.azure.net/"
 }

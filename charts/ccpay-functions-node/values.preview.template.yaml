@@ -5,13 +5,13 @@ function:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
   secrets:
     STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-example-{{ .Release.Name }}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: storageAccountName
     STORAGE_ACCESS_KEY:
-      secretRef: storage-secret-example-{{ .Release.Name }}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: accessKey
     STORAGE_SERVICE_ENDPOINT:
-      secretRef: storage-secret-example-{{ .Release.Name }}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: primaryBlobServiceEndPoint
 blobstorage:
   resourceGroup: fees-pay-rg

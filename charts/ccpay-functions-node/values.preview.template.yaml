@@ -26,6 +26,9 @@ blobstorage:
   enabled: true
 servicebus:
   resourceGroup: fees-pay-rg
+  teamName: "Fees Pay"
+  location: ukwest
+  serviceplan: basic
   setup:
     queues:
       - name: ccpay-function-nodejs

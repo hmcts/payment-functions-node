@@ -1,4 +1,6 @@
 function:
   replicas: 1
+  environement:
+    RetrySchedule: "0 */30 * * * *"
 blobstorage:
   enabled: false

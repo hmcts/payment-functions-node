@@ -4,3 +4,5 @@ function:
     RetrySchedule: "0 */30 * * * *"
 blobstorage:
   enabled: false
+servicebus:
+  enabled: false

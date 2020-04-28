@@ -4,6 +4,9 @@ function:
   environment:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
   secrets:
+    ServiceCallbackBusConnection:
+      secretRef: servicebus-queue-{{ .Release.Name }}-ccpay-function-nodejs
+      key: connectionString
     STORAGE_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}
       key: storageAccountName
@@ -20,4 +23,10 @@ blobstorage:
   setup:
     containers:
       - feespay-function
+  enabled: true
+servicebus:
+  resourceGroup: fees-pay-rg
+  setup:
+    queues:
+      - name: ccpay-function-nodejs
   enabled: true

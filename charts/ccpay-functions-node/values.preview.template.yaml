@@ -3,9 +3,6 @@ function:
   image: ${IMAGE_NAME}
   environment:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
-    SERVICE_CALLBACK_TOPIC: $(SERVICE_CALLBACK_TOPIC)
-    SERVICE_CALLBACK_SUBSCRIPTION: $(SERVICE_CALLBACK_SUBSCRIPTION)
-    SERVICE_CALLBACK_BUS_CONNECTION: $(SERVICE_CALLBACK_BUS_CONNECTION)
   secrets:
     SERVICE_CALLBACK_BUS_CONNECTION:
       secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-ccpay-function-nodejs

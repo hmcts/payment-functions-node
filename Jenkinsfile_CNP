@@ -1,6 +1,6 @@
 #!groovy
 //noinspection GroovyUnusedAssignment
-@Library("Infrastructure")
+@Library("Infrastructure@removesonar")
 def type = "nodejs"
 def product = "ccpay-functions"
 def component = "node"

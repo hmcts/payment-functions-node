@@ -3,7 +3,7 @@
     {
       "topicName": "%SERVICE_CALLBACK_TOPIC%",
       "subscriptionName": "%SERVICE_CALLBACK_SUBSCRIPTION%",
-      "connection": "%SERVICE_CALLBACK_BUS_CONNECTION%",
+      "connection": "SERVICE_CALLBACK_BUS_CONNECTION",
       "name": "serviceCallback",
       "type": "serviceBusTrigger",
       "direction": "in"

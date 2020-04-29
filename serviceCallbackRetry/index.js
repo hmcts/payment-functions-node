@@ -6,7 +6,7 @@ const azure = require('azure-sb');
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
-    const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
+    const serviceBusService = azure.createServiceBusService(process.env['SERVICE_CALLBACK_BUS_CONNECTION']);
     const retryMessages = [];
 
     function sendRetryMessagesToTopic(context) {

@@ -5,13 +5,13 @@ function:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
   secrets:
     ServiceCallbackBusConnection:
-      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-ccpay-function-nodejs
       key: connectionString
     defaultServiceCallbackSubscription:
-      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-ccpay-function-nodejs
       key: subscriptionName
     serviceCallbackTopic:
-      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-ccpay-function-nodejs
       key: topicName
     STORAGE_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}

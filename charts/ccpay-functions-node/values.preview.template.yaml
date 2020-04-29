@@ -5,8 +5,14 @@ function:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
   secrets:
     ServiceCallbackBusConnection:
-      secretRef: servicebus-secret-queue-{{ .Release.Name }}-ccpay-function-nodejs
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
       key: connectionString
+    defaultServiceCallbackSubscription:
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
+      key: subscriptionName
+    serviceCallbackTopic:
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-ccpay-function-nodejs
+      key: topicName
     STORAGE_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}
       key: storageAccountName
@@ -28,8 +34,9 @@ servicebus:
   resourceGroup: fees-pay-rg
   teamName: "Fees Pay"
   location: ukwest
-  serviceplan: basic
+  serviceplan: standard
   setup:
-    queues:
+    topics:
       - name: ccpay-function-nodejs
+        subscriptionNeeded: yes
   enabled: true

@@ -29,6 +29,6 @@ dependencies:
     repository: '@hmctspublic'
     condition: blobstorage.enabled
   - name: servicebus
-    version: 0.2.2
+    version: 0.3.0
     repository: '@hmctspublic'
     condition: servicebus.enabled

@@ -1,8 +1,10 @@
 function:
   replicas: 1
   environment:
-    RetrySchedule: "0 */30 * * * *"
-    FUNCTIONS_EXTENSION_VERSION: "~2"
+    RETRY_SCHEDULE: "0 */30 * * * *"
+    SERVICE_CALLBACK_TOPIC: "serviceCallbackTopic"
+    SERVICE_CALLBACK_SUBSCRIPTION: "defaultServiceCallbackSubscription"
+    SERVICE_CALLBACK_BUS_CONNECTION: "ServiceCallbackBusConnection"
 blobstorage:
   enabled: false
 servicebus:

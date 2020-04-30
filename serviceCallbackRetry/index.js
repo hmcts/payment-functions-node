@@ -25,7 +25,7 @@ module.exports = async function (context) {
     async function retrieveQueueMessage(context) {
         context.log.info("Trying to retrieve message from retry queue");
         return new Promise((resolve, reject) => {
-            serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
+            serviceBusService.receiveQueueMessage(process.env['SERVICE_CALLBACK_RETRY_QUEUE'], {isPeekLock: true}, function (error, msg) {
                 if (!error) {
                     processMessage(msg, context);
                     retrieveQueueMessage(context); // try again for new messages

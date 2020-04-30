@@ -3,6 +3,7 @@ function:
   image: ${IMAGE_NAME}
   environment:
     AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
+    SERVICE_CALLBACK_RETRY_QUEUE: servicecallbackretryqueue
   secrets:
     SERVICE_CALLBACK_BUS_CONNECTION:
       secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-servicecallbacktopic
@@ -34,5 +35,5 @@ servicebus:
       - name: servicecallbacktopic
         subscriptionNeeded: yes
     queues:
-      - name: serviceCallbackRetryQueue
+      - name: servicecallbackretryqueue
   enabled: true

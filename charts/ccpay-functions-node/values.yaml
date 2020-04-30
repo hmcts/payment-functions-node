@@ -3,6 +3,7 @@ function:
   environment:
     RETRY_SCHEDULE: "0 */30 * * * *"
     SERVICE_CALLBACK_TOPIC: "servicecallbacktopic"
+    SERVICE_CALLBACK_RETRY_QUEUE: serviceCallbackRetryQueue
 blobstorage:
   enabled: false
 servicebus:

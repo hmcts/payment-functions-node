@@ -2,6 +2,7 @@ function:
   replicas: 1
   environment:
     RETRY_SCHEDULE: "0 */30 * * * *"
+    SERVICE_CALLBACK_TOPIC: "servicecallbacktopic"
 blobstorage:
   enabled: false
 servicebus:

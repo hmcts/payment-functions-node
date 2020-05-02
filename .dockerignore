@@ -10,6 +10,5 @@
 !serviceCallbackFunction/**
 !serviceCallbackRetry/**
 !config/**
-!local.settings.json
 !extensions.csproj
 !host.json

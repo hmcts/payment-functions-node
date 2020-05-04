@@ -2,8 +2,8 @@
 //noinspection GroovyUnusedAssignment
 @Library("Infrastructure@removesonar")
 def type = "nodejs"
-def product = "ccpay-functions"
-def component = "node"
+def product = "ccpay"
+def component = "callback-function"
 
 withPipeline(type, product, component) {
   installCharts()

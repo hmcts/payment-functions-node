@@ -1,0 +1,39 @@
+function:
+  # Don't modify below here
+  image: ${IMAGE_NAME}
+  environment:
+    AzureWebJobsStorage: DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCESS_KEY);EndpointSuffix=core.windows.net
+    SERVICE_CALLBACK_RETRY_QUEUE: servicecallbackretryqueue
+  secrets:
+    SERVICE_CALLBACK_BUS_CONNECTION:
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-servicecallbacktopic
+      key: connectionString
+    SERVICE_CALLBACK_SUBSCRIPTION:
+      secretRef: servicebus-secret-topic-{{ .Release.Name }}-servicebus-servicecallbacktopic
+      key: subscriptionName
+    STORAGE_ACCOUNT_NAME:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: storageAccountName
+    STORAGE_ACCESS_KEY:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: accessKey
+blobstorage:
+  resourceGroup: fees-pay-rg
+  teamName: "Fees Pay"
+  location: ukwest
+  setup:
+    containers:
+      - feespay-function
+  enabled: true
+servicebus:
+  resourceGroup: fees-pay-rg
+  teamName: "Fees Pay"
+  location: ukwest
+  serviceplan: standard
+  setup:
+    topics:
+      - name: servicecallbacktopic
+        subscriptionNeeded: yes
+    queues:
+      - name: servicecallbackretryqueue
+  enabled: true

@@ -15,11 +15,12 @@ beforeEach(function () {
 
     request = {};
 
+    request.put = sinon.stub().returns(request);
     request.patch = sinon.stub().returns(request);
     request.set = sinon.stub().returns(request);
     request.send = sinon.stub().returns(request);
 
-    serviceCallbackFunction = proxyquire('../ServiceCallbackFunction/index.js',
+    serviceCallbackFunction = proxyquire('../serviceCallbackFunction/index.js',
         {
             'superagent': request,
         }
@@ -80,6 +81,7 @@ beforeEach(function () {
 
         log: {
             error: sinon.stub(),
+            info: sinon.stub(),
             debug: sinon.stub()
         },
 
@@ -113,8 +115,8 @@ describe("when message is received", function () {
 
         serviceCallbackFunction(context, payment);
 
-        expect(request.patch).to.have.been.calledOnce;
-        expect(request.patch).to.have.been.calledWith(URL.parse(bindingData.userProperties.serviceCallbackUrl));
+        expect(request.put).to.have.been.calledOnce;
+        expect(request.put).to.have.been.calledWith(bindingData.userProperties.serviceCallbackUrl);
 
     });
 

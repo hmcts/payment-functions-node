@@ -6,11 +6,11 @@ const azure = require('azure-sb');
 const MAX_RETRIES = 3;
 
 module.exports = async function (context) {
-    const serviceBusService = azure.createServiceBusService(process.env['ServiceCallbackBusConnection']);
+    const serviceBusService = azure.createServiceBusService(process.env['SERVICE_CALLBACK_BUS_CONNECTION']);
     const retryMessages = [];
 
     function sendRetryMessagesToTopic(context) {
-        context.log("Received " + retryMessages.length + " messages");
+        context.log.info("Received " + retryMessages.length + " messages");
         retryMessages.forEach(
             msg => {
                 serviceBusService.sendTopicMessage('servicecallbacktopic', msg, function (error) {
@@ -23,9 +23,9 @@ module.exports = async function (context) {
     }
 
     async function retrieveQueueMessage(context) {
-        context.log("Trying to retrieve message from retry queue");
+        context.log.info("Trying to retrieve message from retry queue");
         return new Promise((resolve, reject) => {
-            serviceBusService.receiveQueueMessage('serviceCallbackRetryQueue', {isPeekLock: true}, function (error, msg) {
+            serviceBusService.receiveQueueMessage(process.env['SERVICE_CALLBACK_RETRY_QUEUE'], {isPeekLock: true}, function (error, msg) {
                 if (!error) {
                     processMessage(msg, context);
                     retrieveQueueMessage(context); // try again for new messages

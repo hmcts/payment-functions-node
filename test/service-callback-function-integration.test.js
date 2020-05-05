@@ -1,5 +1,4 @@
 'use strict';
-
 let expect = require('chai').expect;
 
 const express = require('express');
@@ -12,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 const PORT = 4872;
 
-let serviceCallbackFunction = require('../ServiceCallbackFunction/index.js');
+const serviceCallbackFunction = require('../serviceCallbackFunction/index.js');
 
 let context, bindingData;
 
@@ -20,7 +19,7 @@ let serverCalled = false;
 
 let receivedBody = {};
 
-app.patch('/', (req, res) => {
+app.put('/', (req, res) => {
 
     serverCalled = true;
     receivedBody = req.body;

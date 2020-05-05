@@ -1,7 +1,7 @@
 const request = require('superagent');
 
 module.exports = async function (context, mySbMsg) {
-     context.log('Received callback message: ',  JSON.stringify(mySbMsg));
+     context.log.info('Received callback message: ',  JSON.stringify(mySbMsg));
 
     if (!mySbMsg) {
         context.log.error('No body received');

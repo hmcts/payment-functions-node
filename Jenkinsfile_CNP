@@ -1,69 +1,13 @@
 #!groovy
 //noinspection GroovyUnusedAssignment
-@Library("Infrastructure") _
+@Library("Infrastructure@removesonar")
+def type = "nodejs"
+def product = "ccpay"
+def component = "callback-function"
 
-import uk.gov.hmcts.contino.Environment
-import uk.gov.hmcts.contino.Subscription
-
-Environment environment = new Environment(env)
-Subscription subscription = new Subscription(env)
-
-def product = "ccpay-functions"
-def component = "node"
-
-node {
-    env.PATH = "$env.PATH:/usr/local/bin"
-    stage('Checkout') {
-        deleteDir()
-        checkout scm
-    }
-    stage('Build') {
-        yarn("--mutex network install")
-    }
-
-    onMaster {
-         withSubscription(subscription.nonProdName) {
-                withIlbIp(environment.nonProdName) {
-                    spinInfra(product, component, environment.nonProdName, false, subscription.nonProdName)
-                    scmServiceRegistration(environment.nonProdName)
-                }
-                deployStage(product, component, environment.nonProdName, subscription.nonProdName)
-            }
-
-         withSubscription(subscription.prodName) {
-                withIlbIp(environment.prodName) {
-                    spinInfra(product, component, environment.prodName, false, subscription.prodName)
-                    scmServiceRegistration(environment.prodName)
-                }
-                deployStage(product, component, environment.prodName, subscription.prodName)
-            }
-
-    }
-
-    onDemo {
-        withSubscription(subscription.demoName) {
-               withIlbIp(environment.demoName) {
-                   spinInfra(product, component, environment.demoName, false, subscription.demoName)
-                   scmServiceRegistration(environment.demoName)
-               }
-               deployStage(product, component, environment.demoName, subscription.demoName)
-           }
-    }
-}
-
-def deployStage(product, component, environment, subscription) {
-    stage("Deploy Functions") {
-        def az = { cmd -> return sh(script: "env AZURE_CONFIG_DIR=/opt/jenkins/.azure-$subscription az $cmd", returnStdout: true).trim() }
-        def serviceName = "${product}-${component}-${environment}"
-        def result = az "functionapp deployment list-publishing-profiles --name ${serviceName} --resource-group ${serviceName} --query \"[?publishMethod=='MSDeploy'].{publishUrl:publishUrl,userName:userName,userPWD:userPWD}|[0]\""
-        def profile = readJSON text: result
-        def uri = "${profile.userName}:${profile.userPWD}@${profile.publishUrl}"
-        sh "bash uploadSource.sh ${serviceName} functions https://\\${uri}"
-    }
-}
-
-def yarn(task) {
-    sh "cd functions"
-    sh("yarn ${task}")
-    sh "cd .."
+withPipeline(type, product, component) {
+  installCharts()
+  disableLegacyDeployment()
+  enableAksStagingDeployment()
+  nonServiceApp()
 }

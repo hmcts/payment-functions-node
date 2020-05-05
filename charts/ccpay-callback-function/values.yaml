@@ -1,0 +1,12 @@
+function:
+  replicas: 1
+  environment:
+    RETRY_SCHEDULE: "0 */30 * * * *"
+    SERVICE_CALLBACK_TOPIC: "servicecallbacktopic"
+    SERVICE_CALLBACK_RETRY_QUEUE: serviceCallbackRetryQueue
+    AzureFunctionsJobHost__functions__0: serviceCallbackFunction
+    AzureFunctionsJobHost__functions__1: serviceCallbackRetry
+blobstorage:
+  enabled: false
+servicebus:
+  enabled: false

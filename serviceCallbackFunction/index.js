@@ -1,4 +1,6 @@
 const request = require('superagent');
+let appInsights = require('applicationinsights');
+appInsights.setup(process.env['APPINSIGHTS_INSTRUMENTATIONKEY']).start();
 
 module.exports = async function (context, mySbMsg) {
      context.log.info('Received callback message: ',  JSON.stringify(mySbMsg));

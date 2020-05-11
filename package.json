@@ -7,7 +7,7 @@
     "node": ">=12.16.1"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node serviceCallbackFunction/index.js",
     "local": "func host start",
     "deploy": "func azure functionapp publish ccpay-functions-node",
     "setup": "func extensions install",
@@ -18,6 +18,7 @@
     "sonar-scan": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
+    "applicationinsights": "^1.7.5",
     "azure-sb": "^0.11.1",
     "superagent": "^5.2.2"
   },

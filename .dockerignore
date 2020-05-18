@@ -8,7 +8,4 @@
 !yarn.lock
 
 !serviceCallbackFunction/**
-!serviceCallbackRetry/**
 !config/**
-!extensions.csproj
-!host.json

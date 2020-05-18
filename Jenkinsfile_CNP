@@ -6,7 +6,6 @@ def product = "ccpay"
 def component = "callback-function"
 
 withPipeline(type, product, component) {
-  installCharts()
   disableLegacyDeployment()
   nonServiceApp()
 }

@@ -8,7 +8,7 @@ appInsights.setup(config.get('appInsightsInstumentationKey'))
     .setSendLiveMetrics(true)
     .start();
 appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = 'ccpay-callback-function';
-appInsights.defaultClient.config.maxBatchSize = 1;
+appInsights.defaultClient.config.maxBatchSize = 0;
 serviceCallbackFunction().catch((err) => {
   console.log("Error occurred: ", err);
 });

@@ -10,40 +10,20 @@ Go to functions directory `$ cd functions`
 
 Installation
 
-`npm install -g azure-functions-core-tools`
 
-`npm install`
-
-`npm run setup`
+`yarn install`
 
 Configuration
 
-Create a `local.settings.json` file inside the functions folder with the following content:
+Set below environment variables with corresponding servicebus you want to connect to
 
-`
-{
-  "IsEncrypted": false,
-  "Values": {
-    "FUNCTIONS_WORKER_RUNTIME": "node",
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=XXX",
-    "ServiceCallbackBusConnection" : "Endpoint=XXX"
-  }
-}
-`
-
-_Copy the storage value from the functionapp server you want to emulate.
-
-Copy the bus connection from either the functionapp or the servicebus._
+- SERVICE_CALLBACK_BUS_CONNECTION
+- SERVICE_CALLBACK_SUBSCRIPTION
 
 Start
 
-`npm run local` 
+`yarn start` 
 
 Run tests
 
-`npm test`
-
-Add New Functions 
-
-_Create a folder with the name of the new function and add `function.json` and `index.js` following the existing
-function as template_ 
+`yarn test`

@@ -3,7 +3,6 @@
 const { ServiceBusClient } = require("@azure/service-bus");
 let serviceCallbackFunction = require('../serviceCallbackFunction/serviceCallbackFunction');
 
-const { Logger } = require('@hmcts/nodejs-logging');
 let request = require('superagent');
 
 const sandbox = require('sinon').createSandbox();
@@ -17,9 +16,8 @@ let messages, loggerStub;
 beforeEach(function () {
     request.put = sandbox.stub().returns(request);
 
-    loggerStub = {
-        error: sandbox.stub(),
-        info: sandbox.stub()
+    console = {
+        log: sandbox.stub()
     }
 
     const sbClientStub = {
@@ -33,8 +31,6 @@ beforeEach(function () {
     };
 
     sandbox.stub(ServiceBusClient, 'createFromConnectionString').callsFake(() => sbClientStub);
-
-    Logger.getLogger = sandbox.stub().returns(loggerStub);
 });
 
 describe("When messages are received", function () {
@@ -78,7 +74,7 @@ describe("When received message has no callback url", function () {
 
     it('if there is no callback url and error is logged and no url is called back', async function () {
         await serviceCallbackFunction();
-        expect(loggerStub.error).to.have.been.called;
+        expect(console.log).to.have.been.called;
     });
 });
 
@@ -89,7 +85,7 @@ describe("When no message recieved", function () {
 
     it('if there is no message, an info is logged', async function () {
         await serviceCallbackFunction();
-        expect(loggerStub.info).to.have.been.calledWith('no messages received in this run');
+        expect(console.log).to.have.been.calledWith('no messages received in this run');
     });
 });
 
@@ -101,7 +97,7 @@ describe("When no body recieved", function () {
 
     it('if there is no body, an error is logged', async function () {
         await serviceCallbackFunction();
-        expect(loggerStub.error).to.have.been.calledWith('No body received');
+        expect(console.log).to.have.been.calledWith('No body received');
     });
 });
 
@@ -115,7 +111,7 @@ describe("When no userproperties recieved", function () {
 
     it('if there is no body, an error is logged', async function () {
         await serviceCallbackFunction();
-        expect(loggerStub.error).to.have.been.calledWith('No userProperties data');
+        expect(console.log).to.have.been.calledWith('No userProperties data');
     });
 });
 
@@ -137,7 +133,7 @@ describe("When serviceCallbackUrl returns error", function () {
         await serviceCallbackFunction();
         expect(request.put).to.have.been.calledOnce;
         expect(request.put).to.have.been.calledWith(messages[0].userProperties.serviceCallbackUrl);
-        expect(loggerStub.error).to.have.been.calledWithMatch('Error response received from callback provider: ');
+        expect(console.log).to.have.been.calledWithMatch('Error response received from callback provider: ');
         expect(messages[0].clone).to.have.been.called
     });
 });

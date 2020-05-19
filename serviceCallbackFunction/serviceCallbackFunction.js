@@ -7,8 +7,6 @@ const topicName = config.get('servicecallbackTopicName');
 const subscriptionName = config.get('servicecallbackSubscriptionName');
 const processMessagesCount = config.get('processMessagesCount');
 
-const { Logger } = require('@hmcts/nodejs-logging');
-
 const MAX_RETRIES = 3;
 
 let logger;
@@ -17,7 +15,6 @@ module.exports = async function serviceCallbackFunction() {
     const sbClient = ServiceBusClient.createFromConnectionString(connectionString);
     const subscriptionClient = sbClient.createSubscriptionClient(topicName, subscriptionName);
     const receiver = subscriptionClient.createReceiver(ReceiveMode.receiveAndDelete);
-    logger = Logger.getLogger('serviceCallbackFunction');
     await receiver.receiveMessages(processMessagesCount)
        .then(async(messages) => {
             if (messages.length > 0) {
@@ -25,7 +22,7 @@ module.exports = async function serviceCallbackFunction() {
                     await processMsg(msg)
                 });
             } else {
-                logger.info('no messages received in this run');
+                console.log('no messages received in this run');
             }
     }).finally(async () => {
         await subscriptionClient.close();
@@ -34,20 +31,20 @@ module.exports = async function serviceCallbackFunction() {
 }
 
 validateMessage = message => {
-    logger.info('Received callback message: ', JSON.stringify(message.body));
+    console.log('Received callback message: ', JSON.stringify(message.body));
     if (!message.body) {
-        logger.error('No body received');
+        console.log('No body received');
         return false;
     }
     if (!message.userProperties) {
-        logger.error('No userProperties data');
+        console.log('No userProperties data');
         return false;
     }
     let serviceCallbackUrl = message.userProperties.serviceCallbackUrl;
     if (!serviceCallbackUrl) {
         serviceCallbackUrl = message.userProperties.servicecallbackurl;
         if (!serviceCallbackUrl) {
-            logger.info('No service callback url...');
+            console.log('No service callback url...');
             return false;
         }
     }
@@ -60,17 +57,17 @@ async function processMsg(msg) {
         try {
             const res = await request.put(serviceCallbackUrl).send(msg.body);
             if (res && res.status >= 200 && res.status < 300) {
-                logger.info('Message Sent Successfully to ' + serviceCallbackUrl);
+                console.log('Message Sent Successfully to ' + serviceCallbackUrl);
             } else {
                 await addRetryMessagesIfNeeded(msg);
-                logger.error('Error response received from callback provider: ', res.status);
+                console.log('Error response received from callback provider: ', res.status);
             }
         } catch (err) {
-            logger.error('Error response received from ', serviceCallbackUrl, err );
+            console.log('Error response received from ', serviceCallbackUrl, err );
             await addRetryMessagesIfNeeded(msg);
         }
     } else {
-        logger.error('Skipping processing invalid message ' + JSON.stringify(msg.body));
+        console.log('Skipping processing invalid message ' + JSON.stringify(msg.body));
     }
 }
 
@@ -78,7 +75,7 @@ async function addRetryMessagesIfNeeded(msg) {
     if (!msg.userProperties.retries) {
         msg.userProperties.retries = 0;
     } else if (msg.userProperties.retries === MAX_RETRIES) {
-        logger.info("Max number of retries reached for ", JSON.stringify(msg));
+        console.log("Max number of retries reached for ", JSON.stringify(msg));
         await msg.complete();
         return;
     }
@@ -94,10 +91,10 @@ async function sendMessage(msg) {
     const retryAfterHalfAnHour = new Date(msgFailedTime.setMinutes(msgFailedTime.getMinutes() + 30));
     topicSender.scheduleMessage(retryAfterHalfAnHour, msg)
         .then(() => {
-            logger.info("Message is scheduled to retry at UTC: ", retryAfterHalfAnHour);
+            console.log("Message is scheduled to retry at UTC: ", retryAfterHalfAnHour);
         })
         .catch(err => {
-            logger.error("Error while scheduling message ", err)
+            console.log("Error while scheduling message ", err)
         }).finally(async () => {
             await topicClient.close();
             await sbClient.close();

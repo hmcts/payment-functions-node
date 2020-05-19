@@ -14,20 +14,16 @@ type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.1
+version: 0.1.2
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the chart.
-appVersion: 0.1.0
+appVersion: 0.1.2
 
 dependencies:
   - name: function
-    version: 0.1.1-beta
+    version: 0.1.2-beta
     repository: '@hmctspublic'
-  - name: blobstorage
-    version: 0.2.1
-    repository: '@hmctspublic'
-    condition: blobstorage.enabled
   - name: servicebus
     version: 0.3.0
     repository: '@hmctspublic'

@@ -1,5 +1,6 @@
 {
   "servicecallbackBusConnection": "SERVICE_CALLBACK_BUS_CONNECTION",
   "servicecallbackSubscriptionName": "SERVICE_CALLBACK_SUBSCRIPTION",
-  "processMessagesCount": "PROCESS_MESSAGES_COUNT"
+  "processMessagesCount": "PROCESS_MESSAGES_COUNT",
+  "appInsightsInstumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY"
 }

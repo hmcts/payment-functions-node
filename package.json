@@ -16,9 +16,10 @@
   },
   "dependencies": {
     "@azure/service-bus": "^1.1.7",
+    "@hmcts/nodejs-logging": "^3.0.1",
+    "applicationinsights": "^1.7.5",
     "config": "^3.3.1",
-    "superagent": "^5.2.2",
-    "@hmcts/nodejs-logging": "^3.0.1"
+    "superagent": "^5.2.2"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",

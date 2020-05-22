@@ -3,7 +3,7 @@ function:
     type: azure-servicebus
     servicebus:
       topicName: "servicecallbacktopic"
-      subscriptionName: SERVICE_CALLBACK_SUBSCRIPTION
+      subscriptionName: defaultServiceCallbackSubscription
       connection: SERVICE_CALLBACK_BUS_CONNECTION
       queueLength: 1
 servicebus:

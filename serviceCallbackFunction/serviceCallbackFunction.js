@@ -6,28 +6,64 @@ const connectionString = config.get('servicecallbackBusConnection');
 const topicName = config.get('servicecallbackTopicName');
 const subscriptionName = config.get('servicecallbackSubscriptionName');
 const processMessagesCount = config.get('processMessagesCount');
+const delayTime = config.get('delayMessageMinutes');
 
 const MAX_RETRIES = 3;
-
-let logger;
 
 module.exports = async function serviceCallbackFunction() {
     const sbClient = ServiceBusClient.createFromConnectionString(connectionString);
     const subscriptionClient = sbClient.createSubscriptionClient(topicName, subscriptionName);
-    const receiver = subscriptionClient.createReceiver(ReceiveMode.receiveAndDelete);
-    await receiver.receiveMessages(processMessagesCount)
-       .then(async(messages) => {
-            if (messages.length > 0) {
-                messages.forEach(async (msg) => {
-                    await processMsg(msg)
-                });
+    const receiver = subscriptionClient.createReceiver(ReceiveMode.peekLock);
+    const messages = await receiver.receiveMessages(processMessagesCount);
+    if (messages.length == 0) {
+        console.log('no messages received in this run');
+    }
+    for (let i = 0; i < messages.length; i++) {
+        let msg = messages[i];
+        let serviceCallbackUrl;
+        try {
+            if (this.validateMessage(msg)) {
+                serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
+                const res = await request.put(serviceCallbackUrl).send(msg.body);
+                console.log("Attempting to invoke callback" + serviceCallbackUrl);
+                if (res && res.status >= 200 && res.status < 300) {
+                    console.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                } else {
+                    console.log('Received response status  ', res.status);
+                    throw res.status;
+                }
             } else {
-                console.log('no messages received in this run');
+                console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
+                await msg.deadLetter()
             }
-    }).finally(async () => {
-        await subscriptionClient.close();
-        await sbClient.close();
-    });
+        } catch (err) {
+            console.log('Error response received from ', serviceCallbackUrl, err);
+            if (!msg.userProperties.retries) {
+                msg.userProperties.retries = 0;
+            }
+            if (msg.userProperties.retries === MAX_RETRIES) {
+                console.log("Max number of retries reached for ", JSON.stringify(msg.body));
+                await msg.deadLetter()
+                    .then(() => {
+                        console.log("Dead lettered a message ", JSON.stringify(msg.body));
+                    })
+                    .catch(err => {
+                        console.log("Error while dead letter message ", err)
+                    });
+            } else {
+                msg.userProperties.retries++;
+                await sendMessage(msg.clone());
+            }
+
+        } finally {
+            if (!msg.isSettled) {
+                await msg.complete();
+            }
+        }
+
+    }
+    await subscriptionClient.close();
+    await sbClient.close();
 }
 
 validateMessage = message => {
@@ -51,52 +87,21 @@ validateMessage = message => {
     return true;
 }
 
-async function processMsg(msg) {
-    if (this.validateMessage(msg)) {
-        const serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
-        try {
-            const res = await request.put(serviceCallbackUrl).send(msg.body);
-            if (res && res.status >= 200 && res.status < 300) {
-                console.log('Message Sent Successfully to ' + serviceCallbackUrl);
-            } else {
-                await addRetryMessagesIfNeeded(msg);
-                console.log('Error response received from callback provider: ', res.status);
-            }
-        } catch (err) {
-            console.log('Error response received from ', serviceCallbackUrl, err );
-            await addRetryMessagesIfNeeded(msg);
-        }
-    } else {
-        console.log('Skipping processing invalid message ' + JSON.stringify(msg.body));
-    }
-}
-
-async function addRetryMessagesIfNeeded(msg) {
-    if (!msg.userProperties.retries) {
-        msg.userProperties.retries = 0;
-    } else if (msg.userProperties.retries === MAX_RETRIES) {
-        console.log("Max number of retries reached for ", JSON.stringify(msg));
-        await msg.complete();
-        return;
-    }
-    msg.userProperties.retries++;
-    await sendMessage(msg.clone());
-}
 
 async function sendMessage(msg) {
-    const sbClient = ServiceBusClient.createFromConnectionString(connectionString);
-    const topicClient = sbClient.createTopicClient(topicName);
+    const sBusClient = ServiceBusClient.createFromConnectionString(connectionString);
+    const topicClient = sBusClient.createTopicClient(topicName);
     const topicSender = topicClient.createSender();
     const msgFailedTime = new Date();
-    const retryAfterHalfAnHour = new Date(msgFailedTime.setMinutes(msgFailedTime.getMinutes() + 30));
-    topicSender.scheduleMessage(retryAfterHalfAnHour, msg)
+    const retryLaterTime = new Date(msgFailedTime.setMinutes(msgFailedTime.getMinutes() + delayTime));
+    topicSender.scheduleMessage(retryLaterTime, msg)
         .then(() => {
-            console.log("Message is scheduled to retry at UTC: ", retryAfterHalfAnHour);
+            console.log("Message is scheduled to retry at UTC: ", retryLaterTime);
         })
         .catch(err => {
             console.log("Error while scheduling message ", err)
         }).finally(async () => {
             await topicClient.close();
-            await sbClient.close();
+            await sBusClient.close();
         })
 }

@@ -3,5 +3,6 @@
   "servicecallbackBusConnection": "test-fp.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=pQjwhM2tr42puH4zNwGBImegvQ8Tqbwwg0N5RBQKrqk=",
   "servicecallbackSubscriptionName": "defaultServiceCallbackSubscription",
   "processMessagesCount": 10,
-  "appInsightsInstumentationKey": "fake-key"
+  "appInsightsInstumentationKey": "124e39c3-6dad-49ef-aede-d2cddac865c2",
+  "delayMessageMinutes": 1
 }

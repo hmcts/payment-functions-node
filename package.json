@@ -8,9 +8,6 @@
   },
   "scripts": {
     "start": "node serviceCallbackFunction/index.js",
-    "local": "func host start",
-    "deploy": "func azure functionapp publish ccpay-functions-node",
-    "setup": "func extensions install",
     "test": "nyc mocha test/*.js",
     "lint": "eslint . --ext .js",
     "test:coverage": "nyc check-coverage --statements 80 --branches 80 --functions 80 --lines 80",
@@ -18,7 +15,9 @@
     "sonar-scan": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
-    "azure-sb": "^0.11.1",
+    "@azure/service-bus": "^1.1.7",
+    "applicationinsights": "^1.7.5",
+    "config": "^3.3.1",
     "superagent": "^5.2.2"
   },
   "devDependencies": {

@@ -19,6 +19,4 @@ servicebus:
     topics:
       - name: servicecallbacktopic
         subscriptionNeeded: yes
-    queues:
-      - name: servicecallbackretryqueue
   enabled: true

@@ -4,5 +4,5 @@
   "servicecallbackSubscriptionName": "defaultServiceCallbackSubscription",
   "processMessagesCount": 10,
   "appInsightsInstumentationKey": "124e39c3-6dad-49ef-aede-d2cddac865c2",
-  "delayMessageMinutes": 1
+  "delayMessageMinutes": 30
 }

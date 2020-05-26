@@ -93,7 +93,7 @@ async function sendMessage(msg) {
     const topicClient = sBusClient.createTopicClient(topicName);
     const topicSender = topicClient.createSender();
     const msgFailedTime = new Date();
-    const retryLaterTime = new Date(msgFailedTime.setMinutes(msgFailedTime.getMinutes() + delayTime));
+    const retryLaterTime = new Date(msgFailedTime.setMinutes(msgFailedTime.getMinutes() + parseInt(delayTime)));
     topicSender.scheduleMessage(retryLaterTime, msg)
         .then(() => {
             console.log("Message is scheduled to retry at UTC: ", retryLaterTime);

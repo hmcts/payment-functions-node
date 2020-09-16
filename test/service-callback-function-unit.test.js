@@ -88,7 +88,7 @@ describe("When no message recieved", function () {
 
     it('if there is no message, an info is logged', async function () {
         await serviceCallbackFunction();
-        expect(console.log).to.have.been.calledWith('no messages received in this run');
+        expect(console.log).to.have.been.calledWith('no messages received from ServiceBusTopic!!!');
     });
 });
 

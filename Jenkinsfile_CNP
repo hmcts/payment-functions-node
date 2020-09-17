@@ -9,3 +9,9 @@ withPipeline(type, product, component) {
   disableLegacyDeployment()
   nonServiceApp()
 }
+
+def secrets = [
+  'ccpay-${env}': [
+      secret('paybubble-s2s-secret', 'S2S_KEY_PAYMENT_APP')
+  ]
+]

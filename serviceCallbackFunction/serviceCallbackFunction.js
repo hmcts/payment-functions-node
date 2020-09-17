@@ -1,6 +1,8 @@
 const request = require('superagent');
 const { ServiceBusClient, ReceiveMode } = require("@azure/service-bus");
 const config = require('config');
+const otp = require('otp');
+const req = require('request-promise-native');
 
 const connectionString = config.get('servicecallbackBusConnection');
 const topicName = config.get('servicecallbackTopicName');
@@ -21,17 +23,65 @@ module.exports = async function serviceCallbackFunction() {
     for (let i = 0; i < messages.length; i++) {
         let msg = messages[i];
         let serviceCallbackUrl;
+        let serviceName;
         try {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
-                const res = await request.put(serviceCallbackUrl).send(msg.body);
-                console.log("Attempting to invoke callback" + serviceCallbackUrl);
-                if (res && res.status >= 200 && res.status < 300) {
+                serviceName = msg.userProperties.serviceName;
+                // const res = await request.put(serviceCallbackUrl).send(msg.body);
+                // console.log("Attempting to invoke callback" + serviceCallbackUrl);
+                // if (res && res.status >= 200 && res.status < 300) {
+                //     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                // } else {
+                //     console.log('Received response status  ', res.status);
+                //     throw res.status;
+                // }
+                console.log('I am here-----1 ' + serviceCallbackUrl);
+                console.log('I am here-----1 ' + serviceName);
+
+                try {
+
+                    const s2sUrl = config.get["s2sUrl"];
+                    const s2sSecret = config.get["s2sKeyPaymentApp"];
+                    const microService = config.get["microservicePaymentApp"];
+
+                    console.log('I am here-----1 s2sSecret ' + s2sSecret);
+                    console.log('I am here-----1 microService ' + microService);
+
+                    const otpPassword = otp({ secret: s2sSecret }).totp();
+                    const serviceAuthRequest = {
+                        microservice: microService,
+                        oneTimePassword: otpPassword
+                    };
+                    console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
+                    req.post({
+                        uri: s2sUrl + '/lease',
+                        body: serviceAuthRequest,
+                        json: true
+                    })
+                        .then(token => {
+                            console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
+                            req.put({
+                                uri: serviceCallbackUrl,
+                                headers: {
+                                    ServiceAuthorization: token,
+                                    'Content-Type': 'application/json'
+                                },
+                                json: true,
+                                body: mySbMsg
+                            }).then(response => {
+                                console.log('Response : ' + JSON.stringify(response));
                     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
-                } else {
-                    console.log('Received response status  ', res.status);
-                    throw res.status;
+                            }).catch(error => {
+                                console.log('Error in Calling Service ' + error.message + error.response);
+                            })
+                        }).catch(error => {
+                            console.log('Error in fetching S2S token ' + error.message + error.response);
+                        });
+                } catch (error) {
+                    console.log('I am here-----16 ' + error.message + error.response);
                 }
+                console.log('I am here-----17 ' + serviceCallbackUrl);
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()

@@ -17,6 +17,6 @@ servicebus:
   serviceplan: standard
   setup:
     topics:
-      - name: servicecallbacktopic
+      - name: c2VydmljZWNhbGxiYWNrdG9waWM=
         subscriptionNeeded: yes
   enabled: true

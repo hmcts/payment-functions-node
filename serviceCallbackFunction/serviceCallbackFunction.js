@@ -2,7 +2,6 @@ const request = require('superagent');
 const { ServiceBusClient, ReceiveMode } = require("@azure/service-bus");
 const config = require('config');
 const otp = require('otp');
-const req = require('request-promise-native');
 
 const connectionString = config.get('servicecallbackBusConnection');
 const topicName = config.get('servicecallbackTopicName');
@@ -28,59 +27,57 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
-                // const res = await request.put(serviceCallbackUrl).send(msg.body);
-                // console.log("Attempting to invoke callback" + serviceCallbackUrl);
-                // if (res && res.status >= 200 && res.status < 300) {
-                //     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
-                // } else {
-                //     console.log('Received response status  ', res.status);
-                //     throw res.status;
-                // }
                 console.log('I am here-----1 ' + serviceCallbackUrl);
                 console.log('I am here-----1 ' + serviceName);
 
-                try {
+                const s2sUrl = config.get["s2sUrl"];
+                const s2sSecret = config.get["s2sKeyPaymentApp"];
+                const microService = config.get["microservicePaymentApp"];
 
-                    const s2sUrl = config.get["s2sUrl"];
-                    const s2sSecret = config.get["s2sKeyPaymentApp"];
-                    const microService = config.get["microservicePaymentApp"];
+                // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
+                // const s2sSecret = 'VMRSXPISHBYGGJCI';
+                // const microService = 'payment_app';
 
-                    console.log('I am here-----1 s2sSecret ' + s2sSecret);
-                    console.log('I am here-----1 microService ' + microService);
+                console.log('I am here-----1 s2sSecret ' + s2sSecret);
+                console.log('I am here-----1 microService ' + microService);
 
-                    const otpPassword = otp({ secret: s2sSecret }).totp();
-                    const serviceAuthRequest = {
-                        microservice: microService,
-                        oneTimePassword: otpPassword
-                    };
-                    console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
-                    req.post({
-                        uri: s2sUrl + '/lease',
-                        body: serviceAuthRequest,
-                        json: true
-                    }).then(token => {
-                            console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
-                            req.put({
-                                uri: serviceCallbackUrl,
-                                headers: {
-                                    ServiceAuthorization: token,
-                                    'Content-Type': 'application/json'
-                                },
-                                json: true,
-                                body: mySbMsg
-                            }).then(response => {
-                                console.log('Response : ' + JSON.stringify(response));
-                                console.log('Message Sent Successfully to ' + serviceCallbackUrl);
-                            }).catch(error => {
-                                console.log('Error in Calling Service ' + error.message + error.response);
-                            })
-                        }).catch(error => {
-                            console.log('Error in fetching S2S token ' + error.message + error.response);
-                        });
-                } catch (error) {
-                    console.log('I am here-----16 ' + error.message + error.response);
-                }
-                console.log('I am here-----17 ' + serviceCallbackUrl);
+                const otpPassword = otp({ secret: s2sSecret }).totp();
+                const serviceAuthRequest = {
+                    microservice: microService,
+                    oneTimePassword: otpPassword
+                };
+                console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
+                request.post({
+                    uri: s2sUrl + '/lease',
+                    body: serviceAuthRequest,
+                    json: true
+                }, (token, body, error) => {
+                    console.log('I am here-----123');
+                    console.log(token, body, error);
+
+                    if (token) {
+                        console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
+
+                        const res = request.put({
+                            uri: serviceCallbackUrl,
+                            headers: {
+                                ServiceAuthorization: token,
+                                'Content-Type': 'application/json'
+                            },
+                            json: true
+                        }).send(msg.body);
+                        console.log('Service Response : ' + res.status);
+                        if (res && res.status >= 200 && res.status < 300) {
+                            console.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                        } else {
+                            console.log('Received response status  ', res.status);
+                            throw res.status;
+                        }
+                    }
+                    if (error) {
+                        console.log('Error in fetching S2S token ' + error.message + error.response);
+                    }
+                })
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()

@@ -11,8 +11,8 @@ servicebus:
 nodejs:
   environment:
     S2S_URL: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-    MICROSERVICE_PAYMENT_APP: "ccpay_bubble"
+    MICROSERVICE_PAYMENT_APP: "payment_app"
   keyVaults:
     "ccpay":
       secrets:
-        - paybubble-s2s-secret
+        - payment-s2s-secret

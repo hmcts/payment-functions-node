@@ -12,6 +12,6 @@ withPipeline(type, product, component) {
 
 def secrets = [
   'ccpay-${env}': [
-      secret('paybubble-s2s-secret', 'S2S_KEY_PAYMENT_APP')
+      secret('payment-s2s-secret', 'S2S_KEY_PAYMENT_APP')
   ]
 ]

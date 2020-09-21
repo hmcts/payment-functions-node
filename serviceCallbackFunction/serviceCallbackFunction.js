@@ -68,7 +68,7 @@ module.exports = async function serviceCallbackFunction() {
                         }).send(msg.body);
                         console.log('Service Response : ' + res.status);
                         if (res && res.status >= 200 && res.status < 300) {
-                            console.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                            console.log('Message Sent Successfully to ' + serviceCallbackUrl + 'token ' + token);
                         } else {
                             console.log('Received response status  ', res.status);
                             throw res.status;
@@ -130,6 +130,7 @@ validateMessage = message => {
             return false;
         }
     }
+    console.log('Received Callback Message is Valid!!!');
     return true;
 }
 

@@ -55,7 +55,7 @@ module.exports = async function serviceCallbackFunction() {
                     console.log('I am here-----123');
                     console.log(token, body, error);
 
-                    if (token) {
+                    if (token && !token.errno) {
                         console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
 
                         const res = request.put({
@@ -74,8 +74,8 @@ module.exports = async function serviceCallbackFunction() {
                             throw res.status;
                         }
                     }
-                    if (error) {
-                        console.log('Error in fetching S2S token ' + error.message + error.response);
+                    if (token && token.errno) {
+                        console.log('Error in fetching S2S token ' + token.errno + token.code);
                     }
                 })
             } else {

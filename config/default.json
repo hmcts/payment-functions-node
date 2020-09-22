@@ -1,6 +1,6 @@
 {
   "servicecallbackTopicName": "servicecallbacktopic",
-  "servicecallbackBusConnection": "Endpoint=sb://ccpay-servicebus-demo.servicebus.windows.net/;SharedAccessKeyName=SendAndListenSharedAccessKey;SharedAccessKey=sulCw3ukm4C5FRr0K+Gfra9JT6mk3a3WrCvshHbk8gA=",
+  "servicecallbackBusConnection": "<Service-Bus-Connection>",
   "servicecallbackSubscriptionName": "defaultServiceCallbackSubscription",
   "processMessagesCount": 10,
   "appInsightsInstumentationKey": "124e39c3-6dad-49ef-aede-d2cddac865c2",

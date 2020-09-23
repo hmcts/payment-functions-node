@@ -8,4 +8,3 @@
 !yarn.lock
 
 !serviceCallbackFunction/**
-!config/**

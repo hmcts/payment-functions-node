@@ -5,8 +5,4 @@ RUN yarn install --production  && rm -r ~/.cache/yarn
 
 # ---- Runtime imge ----
 FROM base as runtime
-COPY config .
-COPY node_modules .
-COPY package.json .
-COPY serviceCallbackFunction .
-COPY yarn.lock .
+COPY . .

@@ -47,7 +47,7 @@ describe("When messages are received", function () {
             clone: sandbox.stub()
         }];
         request.send = sandbox.stub().returns({ "status": 200 });
-        sandbox.stub(request, 'post').yields("12345" , null, null);
+        sandbox.stub(request, 'post').yields("12345");
     });
 
     it('the desired url is called back', async function () {
@@ -130,7 +130,7 @@ describe("When no userproperties recieved", function () {
 describe("When serviceCallbackUrl returns success, s2sToken not received", function () {
     before(function () {
         request.send = sandbox.stub().returns({ "status": 200 });
-        sandbox.stub(request, 'post').yields(null , null, {"message" : "S2SToken Failed", "response" : 500});
+        sandbox.stub(request, 'post').yields({"errno" : "S2SToken Failed", "code" : 500});
         messages = [{
             body: {
                 "amount": 3000000,
@@ -147,7 +147,7 @@ describe("When serviceCallbackUrl returns success, s2sToken not received", funct
     it('if there is an error from S2S Service Token, an error is logged', async function () {
         await serviceCallbackFunction();
         expect(request.post).to.have.been.calledOnce;
-        //expect(console.log).to.have.been.calledWithMatch('Error in fetching S2S token ');
+        expect(console.log).to.have.been.calledWithMatch('Error in fetching S2S token ');
     });
 });
 
@@ -155,7 +155,7 @@ describe("When serviceCallbackUrl returns success, s2sToken not received", funct
 describe("When serviceCallbackUrl returns error, deadletter success", function () {
     before(function () {
         request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(request, 'post').yields("12345" , null, null);
+        sandbox.stub(request, 'post').yields("12345");
         messages = [{
             body: {
                 "amount": 3000000,
@@ -197,7 +197,7 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
 describe("When serviceCallbackUrl returns error, deadletter fails", function () {
     before(function () {
         request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(request, 'post').yields("12345" , null, null);
+        sandbox.stub(request, 'post').yields("12345");
         messages = [{
             body: {
                 "amount": 3000000,

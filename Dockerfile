@@ -5,4 +5,6 @@ RUN yarn install --production  && rm -r ~/.cache/yarn
 
 # ---- Runtime imge ----
 FROM base as runtime
+ADD config
+ADD serviceCallbackFunction
 COPY . .

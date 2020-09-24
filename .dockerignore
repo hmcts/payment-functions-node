@@ -1,12 +1,15 @@
 # exclude all by default
 
-*/charts
-*/test
-*/.eslintrc.yml
-*/.gitignore
-*/Dockerfile
-*/Jenkinsfile_CNP
-*/Jenkinsfile_parameterized
-*/sonar-project.properties
+charts?
+test?
+.eslintrc.yml?
+.gitignore?
+Dockerfile?
+Jenkinsfile_CNP?
+Jenkinsfile_parameterized?
+sonar-project.properties?
+coverage?
+version?
+yarn-audit?
 
 # exceptions from `exclude all` rule

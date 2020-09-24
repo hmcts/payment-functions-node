@@ -9,6 +9,10 @@ const subscriptionName = config.get('servicecallbackSubscriptionName');
 const processMessagesCount = config.get('processMessagesCount');
 const delayTime = config.get('delayMessageMinutes');
 
+const s2sUrl = config.get('s2sUrl');
+const s2sSecret = config.get('s2sKeyPaymentApp');
+const microService = config.get('microservicePaymentApp');
+
 const MAX_RETRIES = 3;
 
 module.exports = async function serviceCallbackFunction() {
@@ -29,10 +33,6 @@ module.exports = async function serviceCallbackFunction() {
                 serviceName = msg.userProperties.serviceName;
                 console.log('I am here-----1 ' + serviceCallbackUrl);
                 console.log('I am here-----1 ' + serviceName);
-
-                const s2sUrl = config.get('s2sUrl');
-                const s2sSecret = config.get('s2sKeyPaymentApp');
-                const microService = config.get('microservicePaymentApp');
 
                 // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
                 // const s2sSecret = 'VMRSXPISHBYGGJCI';

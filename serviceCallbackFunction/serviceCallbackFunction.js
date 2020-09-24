@@ -1,6 +1,6 @@
 const request = require('superagent');
 const { ServiceBusClient, ReceiveMode } = require("@azure/service-bus");
-const config = require('config');
+const config = require('@hmcts/properties-volume').addTo(require('config'));
 const otp = require('otp');
 
 const connectionString = config.get('servicecallbackBusConnection');

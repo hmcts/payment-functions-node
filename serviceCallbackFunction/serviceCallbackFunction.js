@@ -30,9 +30,9 @@ module.exports = async function serviceCallbackFunction() {
                 console.log('I am here-----1 ' + serviceCallbackUrl);
                 console.log('I am here-----1 ' + serviceName);
 
-                const s2sUrl = config.get["s2sUrl"];
-                const s2sSecret = config.get["s2sKeyPaymentApp"];
-                const microService = config.get["microservicePaymentApp"];
+                const s2sUrl = config.get('s2sUrl');
+                const s2sSecret = config.get('s2sKeyPaymentApp');
+                const microService = config.get('microservicePaymentApp');
 
                 // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
                 // const s2sSecret = 'VMRSXPISHBYGGJCI';

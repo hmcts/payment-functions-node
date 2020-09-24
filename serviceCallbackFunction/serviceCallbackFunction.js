@@ -38,6 +38,7 @@ module.exports = async function serviceCallbackFunction() {
                 // const s2sSecret = 'VMRSXPISHBYGGJCI';
                 // const microService = 'payment_app';
 
+                console.log('I am here-----1 s2sUrl ' + s2sUrl);
                 console.log('I am here-----1 s2sSecret ' + s2sSecret);
                 console.log('I am here-----1 microService ' + microService);
 

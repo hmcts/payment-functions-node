@@ -5,7 +5,7 @@
   "processMessagesCount": 10,
   "appInsightsInstumentationKey": "124e39c3-6dad-49ef-aede-d2cddac865c2",
   "delayMessageMinutes": 30,
-  "s2sUrl": "",
-  "s2sKeyPaymentApp": "",
-  "microservicePaymentApp": ""
+  "s2sUrl": "http://rpe-service-auth-provider-demo.service.core-compute-demo.internal",
+  "s2sKeyPaymentApp": "VMRSXPISHBYGGJCI",
+  "microservicePaymentApp": "payment_app"
 }

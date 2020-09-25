@@ -55,7 +55,6 @@ module.exports = async function serviceCallbackFunction() {
                     json: true
                 }).then(token => {
                     console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
-
                     s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {

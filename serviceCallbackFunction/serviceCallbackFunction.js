@@ -73,10 +73,12 @@ module.exports = async function serviceCallbackFunction() {
                 }).catch(error => {
                     console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
                 });
+                console.log('I am here-----13 Message Delivered to Service!!!');
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()
             }
+            console.log('I am here-----14 Message Delivered to Service!!!');
         } catch (err) {
             console.log('Error response received from ', serviceCallbackUrl, err);
             if (!msg.userProperties.retries) {

@@ -16,6 +16,10 @@ def subscription = 'sandbox'
 
 echo "Building '${product}-${component}' in '${environment}'"
 
+List<LinkedHashMap<String, Object>> secrets = [
+        secret('payment-s2s-secret', 'S2S_KEY_PAYMENT_APP')
+]
+
 node {
     env.PATH = "$env.PATH:/usr/local/bin"
     stage('Checkout') {
@@ -56,7 +60,3 @@ def yarn(task) {
     sh("yarn ${task}")
     sh "cd .."
 }
-
-List<LinkedHashMap<String, Object>> secrets = [
-        secret('payment-s2s-secret', 'S2S_KEY_PAYMENT_APP')
-]

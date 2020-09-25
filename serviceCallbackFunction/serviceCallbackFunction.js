@@ -1,4 +1,5 @@
 const request = require('superagent');
+const s2sRequest = require('request-promise-native');
 const { ServiceBusClient, ReceiveMode } = require("@azure/service-bus");
 const config = require('@hmcts/properties-volume').addTo(require('config'));
 const otp = require('otp');
@@ -48,7 +49,7 @@ module.exports = async function serviceCallbackFunction() {
                     oneTimePassword: otpPassword
                 };
                 console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
-                request.post({
+                s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true

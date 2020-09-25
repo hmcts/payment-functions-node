@@ -10,7 +10,7 @@ const processMessagesCount = config.get('processMessagesCount');
 const delayTime = config.get('delayMessageMinutes');
 
 const s2sUrl = config.get('s2sUrl');
-const s2sSecret = config.get('s2sKeyPaymentApp');
+const s2sSecret = config.get('secrets.ccpay.payment-s2s-secret');
 const microService = config.get('microservicePaymentApp');
 
 const MAX_RETRIES = 3;

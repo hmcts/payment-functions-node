@@ -64,10 +64,10 @@ module.exports = async function serviceCallbackFunction() {
                         json: true,
                         body: msg
                     }).then(response => {
-                        context.log('Response : ' + JSON.stringify(response));
-                        context.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                        console.log('Response : ' + JSON.stringify(response));
+                        console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                     }).catch(error => {
-                        context.log('Error in Calling Service ' + error.message + error.response);
+                        console.log('Error in Calling Service ' + error.message + error.response);
                         throw error;
                     })
                 }).catch(error => {

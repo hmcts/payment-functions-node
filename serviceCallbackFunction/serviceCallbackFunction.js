@@ -53,32 +53,27 @@ module.exports = async function serviceCallbackFunction() {
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true
-                }, (token) => {
-                    console.log('I am here-----12345');
+                }).then(token => {
+                    console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
 
-                    if (token && !token.errno) {
-                        console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
-
-                        const res = request.put({
-                            uri: serviceCallbackUrl,
-                            headers: {
-                                ServiceAuthorization: token,
-                                'Content-Type': 'application/json'
-                            },
-                            json: true
-                        }).send(msg.body);
-                        console.log('Service Response : ' + res.status);
-                        if (res && res.status >= 200 && res.status < 300) {
-                            console.log('Message Sent Successfully to ' + serviceCallbackUrl + 'token ' + token);
-                        } else {
-                            console.log('Received response status  ', res.status);
-                            throw res.status;
-                        }
+                    const res = request.put({
+                        uri: serviceCallbackUrl,
+                        headers: {
+                            ServiceAuthorization: token,
+                            'Content-Type': 'application/json'
+                        },
+                        json: true
+                    }).send(msg.body);
+                    console.log('Service Response : ' + res.status);
+                    if (res && res.status >= 200 && res.status < 300) {
+                        console.log('Message Sent Successfully to ' + serviceCallbackUrl + 'token ' + token);
+                    } else {
+                        console.log('Received response status ', res.status);
+                        throw res.status;
                     }
-                    if (token && token.errno) {
-                        console.log('Error in fetching S2S token errno ' + token.errno + ' code ' + token.code);
-                    }
-                })
+                }).catch(error => {
+                    console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
+                });
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()

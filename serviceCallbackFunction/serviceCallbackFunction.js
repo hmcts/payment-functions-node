@@ -56,21 +56,21 @@ module.exports = async function serviceCallbackFunction() {
                 }).then(token => {
                     console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
 
-                    const res = request.put({
+                    s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {
                             ServiceAuthorization: token,
                             'Content-Type': 'application/json'
                         },
-                        json: true
-                    }).send(msg.body);
-                    console.log('Service Response : ' + JSON.stringify(res));
-                    if (res && res.status >= 200 && res.status < 300) {
-                        console.log('Message Sent Successfully to ' + serviceCallbackUrl + 'token ' + token);
-                    } else {
-                        console.log('Received response status ', res.status);
-                        throw res.status;
-                    }
+                        json: true,
+                        body: msg
+                    }).then(response => {
+                        context.log('Response : ' + JSON.stringify(response));
+                        context.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                    }).catch(error => {
+                        context.log('Error in Calling Service ' + error.message + error.response);
+                        throw error;
+                    })
                 }).catch(error => {
                     console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
                 });

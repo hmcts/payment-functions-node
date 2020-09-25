@@ -48,14 +48,13 @@ module.exports = async function serviceCallbackFunction() {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
-                console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
+                console.log('I am here-----1 otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true
                 }, (token) => {
-                    console.log('I am here-----123');
-                    console.log(token);
+                    console.log('I am here-----1 ' + token);
 
                     if (token && !token.errno) {
                         console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
@@ -77,7 +76,7 @@ module.exports = async function serviceCallbackFunction() {
                         }
                     }
                     if (token && token.errno) {
-                        console.log('Error in fetching S2S token ' + token.errno + token.code);
+                        console.log('Error in fetching S2S token errno ' + token.errno + ' code ' + token.code);
                     }
                 })
             } else {

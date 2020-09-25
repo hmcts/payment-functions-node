@@ -67,8 +67,24 @@ module.exports = async function serviceCallbackFunction() {
                         console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                     }).catch(error => {
-                        console.log('Error in Calling Service ' + error.message + error.response);
-                        throw error;
+                        console.log('Error in Calling Service ' + error.message + ' response ' + error.response);
+
+                        if (!msg.userProperties.retries) {
+                            msg.userProperties.retries = 0;
+                        }
+                        if (msg.userProperties.retries === MAX_RETRIES) {
+                            console.log("Max number of retries reached for ", JSON.stringify(msg.body));
+                            msg.deadLetter()
+                                .then(() => {
+                                    console.log("Dead lettered a message ", JSON.stringify(msg.body));
+                                })
+                                .catch(err => {
+                                    console.log("Error while dead letter message ", err)
+                                });
+                        } else {
+                            msg.userProperties.retries++;
+                            sendMessage(msg.clone());
+                        }
                     })
                 }).catch(error => {
                     console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
@@ -81,23 +97,6 @@ module.exports = async function serviceCallbackFunction() {
             console.log('I am here-----14 Message Delivered to Service!!!');
         } catch (err) {
             console.log('Error response received from ', serviceCallbackUrl, err);
-            if (!msg.userProperties.retries) {
-                msg.userProperties.retries = 0;
-            }
-            if (msg.userProperties.retries === MAX_RETRIES) {
-                console.log("Max number of retries reached for ", JSON.stringify(msg.body));
-                await msg.deadLetter()
-                    .then(() => {
-                        console.log("Dead lettered a message ", JSON.stringify(msg.body));
-                    })
-                    .catch(err => {
-                        console.log("Error while dead letter message ", err)
-                    });
-            } else {
-                msg.userProperties.retries++;
-                await sendMessage(msg.clone());
-            }
-
         } finally {
             if (!msg.isSettled) {
                 await msg.complete();

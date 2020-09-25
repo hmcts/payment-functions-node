@@ -54,7 +54,7 @@ module.exports = async function serviceCallbackFunction() {
                     body: serviceAuthRequest,
                     json: true
                 }, (token) => {
-                    console.log('I am here-----1 ' + token);
+                    console.log('I am here-----12345');
 
                     if (token && !token.errno) {
                         console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));

@@ -32,23 +32,23 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
-                console.log('I am here-----1 ' + serviceCallbackUrl);
-                console.log('I am here-----1 ' + serviceName);
+                console.log('I am here-----11 ' + serviceCallbackUrl);
+                console.log('I am here-----11 ' + serviceName);
 
                 // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
                 // const s2sSecret = 'VMRSXPISHBYGGJCI';
                 // const microService = 'payment_app';
 
-                console.log('I am here-----1 s2sUrl ' + s2sUrl);
-                console.log('I am here-----1 s2sSecret ' + s2sSecret);
-                console.log('I am here-----1 microService ' + microService);
+                console.log('I am here-----11 s2sUrl ' + s2sUrl);
+                console.log('I am here-----11 s2sSecret ' + s2sSecret);
+                console.log('I am here-----11 microService ' + microService);
 
                 const otpPassword = otp({ secret: s2sSecret }).totp();
                 const serviceAuthRequest = {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
-                console.log('I am here-----1 otpPassword ' + otpPassword);
+                console.log('I am here-----11 otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
@@ -62,7 +62,7 @@ module.exports = async function serviceCallbackFunction() {
                             'Content-Type': 'application/json'
                         },
                         json: true,
-                        body: msg.body
+                        body: JSON.stringify(msg.body)
                     }).then(response => {
                         console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);

@@ -63,7 +63,7 @@ module.exports = async function serviceCallbackFunction() {
                         },
                         json: true,
                         body: {
-                                some: msg.body
+                                msg.body
                             }
                     }).then(response => {
                         console.log('Response : ' + JSON.stringify(response));

@@ -61,7 +61,7 @@ module.exports = async function serviceCallbackFunction() {
                             ServiceAuthorization: token,
                             'Content-Type': 'application/json'
                         },
-                        body: msg.body
+                        body: JSON.parse(msg.body)
                     }).then(response => {
                         console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
@@ -108,7 +108,8 @@ module.exports = async function serviceCallbackFunction() {
 }
 
 validateMessage = message => {
-    console.log('Received callback message: ', JSON.stringify(message.body));
+    console.log('Received callback message1: ', message.body);
+    console.log('Received callback message2: ', JSON.parse(message.body));
     if (!message.body) {
         console.log('No body received');
         return false;

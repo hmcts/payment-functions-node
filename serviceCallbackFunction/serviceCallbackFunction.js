@@ -63,7 +63,7 @@ module.exports = async function serviceCallbackFunction() {
                         },
                         body: JSON.parse(msg.body)
                     }).then(response => {
-                        console.log('Response : ' + JSON.stringify(response));
+                        console.log('Response : ' + JSON.parse(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                     }).catch(error => {
                         console.log('Error in Calling Service ' + error.message + ' response ' + error.response);
@@ -108,11 +108,12 @@ module.exports = async function serviceCallbackFunction() {
 }
 
 validateMessage = message => {
-    console.log('Received callback message1: ', message.body);
-    console.log('Received callback message2: ', JSON.parse(message.body));
     if (!message.body) {
         console.log('No body received');
         return false;
+    } else {
+        console.log('Received callback message: ', message.body);
+        console.log('Received callback message2: ', JSON.parse(message.body));
     }
     if (!message.userProperties) {
         console.log('No userProperties data');

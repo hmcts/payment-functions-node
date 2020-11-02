@@ -48,6 +48,13 @@ module.exports = async function serviceCallbackFunction() {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
+                const messageBody = {
+                    amount: msg.body.amount,
+                    reference: msg.body.reference,
+                    ccd_case_number: msg.body.ccd_case_number,
+                    status: msg.body.status
+                };
+                console.log('I am here-----11 messageBody ' + messageBody);
                 console.log('I am here-----11 otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
@@ -61,7 +68,7 @@ module.exports = async function serviceCallbackFunction() {
                             ServiceAuthorization: token,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.parse(msg.body)
+                        body: messageBody
                     }).then(response => {
                         console.log('Response : ' + JSON.parse(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
@@ -113,7 +120,6 @@ validateMessage = message => {
         return false;
     } else {
         console.log('Received callback message: ', message.body);
-        console.log('Received callback message2: ', JSON.parse(message.body));
     }
     if (!message.userProperties) {
         console.log('No userProperties data');

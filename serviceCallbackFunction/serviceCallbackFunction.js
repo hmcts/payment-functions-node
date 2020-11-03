@@ -62,7 +62,7 @@ module.exports = async function serviceCallbackFunction() {
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
-                    console.log('I am here-----22 ' + ' S2S Token : ' + JSON.stringify(token));
+                    console.log('I am here-----222222 ' + ' S2S Token : ' + JSON.stringify(token));
                     s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {
@@ -70,7 +70,7 @@ module.exports = async function serviceCallbackFunction() {
                             'Content-Type': 'application/json'
                         },
                         json: true,
-                        body: messageBody
+                        body: msg.body
                     }).then(response => {
                         console.log('Response : ' + JSON.parse(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);

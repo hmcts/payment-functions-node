@@ -62,8 +62,8 @@ module.exports = async function serviceCallbackFunction() {
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
-                    console.log('I am here-----222222 ' + ' S2S Token : ' + JSON.stringify(token));
-                    s2sRequest.put({
+                    console.log('I am here-----33333 ' + ' S2S Token : ' + JSON.stringify(token));
+                    const serviceResponse  = s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {
                             ServiceAuthorization: token,
@@ -71,12 +71,12 @@ module.exports = async function serviceCallbackFunction() {
                         },
                         json: true,
                         body: msg.body
-                    }).then(response => {
+                    });
+                    if(serviceResponse && serviceResponse.status >= 200 && serviceResponse.status < 300) {
                         console.log('Response : ' + JSON.parse(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
-                    }).catch(error => {
-                        console.log('Error in Calling Service ' + error.message + ' response ' + error.response);
-
+                    } else {
+                        console.log('Error in Calling Service ' + serviceResponse.status + ' response ' + serviceResponse.message);
                         if (!msg.userProperties.retries) {
                             msg.userProperties.retries = 0;
                         }
@@ -93,7 +93,7 @@ module.exports = async function serviceCallbackFunction() {
                             msg.userProperties.retries++;
                             sendMessage(msg.clone());
                         }
-                    })
+                    }
                 }).catch(error => {
                     console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
                 });

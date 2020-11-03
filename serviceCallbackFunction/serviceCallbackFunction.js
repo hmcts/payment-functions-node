@@ -48,6 +48,7 @@ module.exports = async function serviceCallbackFunction() {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
+                console.log('I am here-----11 message amount ' + msg.body.amount);
                 const messageBody = {
                     amount: msg.body.amount,
                     reference: msg.body.reference,

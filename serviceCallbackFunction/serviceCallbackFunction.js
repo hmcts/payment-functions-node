@@ -68,6 +68,7 @@ module.exports = async function serviceCallbackFunction() {
                             ServiceAuthorization: token,
                             'Content-Type': 'application/json'
                         },
+                        json: true,
                         body: messageBody
                     }).then(response => {
                         console.log('Response : ' + JSON.parse(response));

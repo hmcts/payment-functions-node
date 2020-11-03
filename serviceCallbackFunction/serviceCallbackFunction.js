@@ -70,7 +70,7 @@ module.exports = async function serviceCallbackFunction() {
                             'Content-Type': 'application/json'
                         },
                         json: true,
-                        body: messageBody
+                        body: JSON.stringify(messageBody)
                     }).then(response => {
                         console.log('Response : ' + JSON.parse(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);

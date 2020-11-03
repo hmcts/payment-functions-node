@@ -48,7 +48,7 @@ module.exports = async function serviceCallbackFunction() {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
-                console.log('I am here-----11 message amount ' + msg.body.amount);
+                console.log('I am here-----22 message amount ' + msg.body.amount);
                 const messageBody = {
                     amount: msg.body.amount,
                     reference: msg.body.reference,
@@ -56,13 +56,13 @@ module.exports = async function serviceCallbackFunction() {
                     status: msg.body.status
                 };
                 console.log('I am here-----22 messageBody ' + JSON.stringify(messageBody));
-                console.log('I am here-----11 otpPassword ' + otpPassword);
+                console.log('I am here-----22 otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
-                    console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
+                    console.log('I am here-----22 ' + ' S2S Token : ' + JSON.stringify(token));
                     s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {

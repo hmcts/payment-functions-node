@@ -55,7 +55,7 @@ module.exports = async function serviceCallbackFunction() {
                     ccd_case_number: msg.body.ccd_case_number,
                     status: msg.body.status
                 };
-                console.log('I am here-----11 messageBody ' + JSON.stringify(messageBody));
+                console.log('I am here-----123 messageBody ' + JSON.stringify(messageBody));
                 console.log('I am here-----11 otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',

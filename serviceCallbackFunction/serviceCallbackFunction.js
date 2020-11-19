@@ -32,37 +32,32 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
-                console.log('I am here-----11 ' + serviceCallbackUrl);
-                console.log('I am here-----11 ' + serviceName);
+                console.log('I am here----- ' + serviceCallbackUrl);
+                console.log('I am here----- ' + serviceName);
 
                 // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
                 // const s2sSecret = 'VMRSXPISHBYGGJCI';
                 // const microService = 'payment_app';
 
-                console.log('I am here-----11 s2sUrl ' + s2sUrl);
-                console.log('I am here-----11 s2sSecret ' + s2sSecret);
-                console.log('I am here-----11 microService ' + microService);
+                console.log('I am here----- s2sUrl ' + s2sUrl);
+                console.log('I am here----- s2sSecret ' + s2sSecret);
+                console.log('I am here----- microService ' + microService);
 
                 const otpPassword = otp({ secret: s2sSecret }).totp();
                 const serviceAuthRequest = {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
-                console.log('I am here-----22 message amount ' + msg.body.amount);
-                const messageBody = {
-                    amount: msg.body.amount,
-                    reference: msg.body.reference,
-                    ccd_case_number: msg.body.ccd_case_number,
-                    status: msg.body.status
-                };
-                console.log('I am here-----22 messageBody ' + JSON.stringify(messageBody));
-                console.log('I am here-----22 otpPassword ' + otpPassword);
+                console.log('I am here----- amount ' + msg.body.amount);
+                console.log('I am here----- reference ' + msg.body.reference);
+                console.log('I am here----- status ' + msg.body.status);
+                console.log('I am here----- otpPassword ' + otpPassword);
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
-                    console.log('I am here-----33333 ' + ' S2S Token : ' + JSON.stringify(token));
+                    console.log('I am here----- ' + ' S2S Token : ' + JSON.stringify(token));
                     const serviceResponse  = s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {
@@ -76,10 +71,10 @@ module.exports = async function serviceCallbackFunction() {
                     console.log('Response : ' + JSON.stringify(response));
                     console.log('body : ' + JSON.stringify(body));
                     if(response && response.statusCode >= 200 && response.statusCode < 300) {
-                        console.log('Response : ' + JSON.stringify(error));
+                        console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                     } else {
-                        console.log('Error in Calling Service ' + response.statusCode);
+                        console.log('Error in Calling Service ' + JSON.stringify(response));
                         if (!msg.userProperties.retries) {
                             msg.userProperties.retries = 0;
                         }

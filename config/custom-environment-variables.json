@@ -5,6 +5,6 @@
   "appInsightsInstumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
   "delayMessageMinutes": "DELAY_MESSAGE_MINUTES",
   "s2sUrl": "S2S_URL",
-  "s2sSecret": "S2S_KEY_PAYMENT_APP",
+  "s2sKeyPaymentApp": "S2S_KEY_PAYMENT_APP",
   "microservicePaymentApp": "MICROSERVICE_PAYMENT_APP"
 }

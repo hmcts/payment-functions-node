@@ -33,11 +33,7 @@ module.exports = async function serviceCallbackFunction() {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
 
-                console.log('I am here----- serviceCallbackUrl ' + serviceCallbackUrl);
-                console.log('I am here----- serviceName ' + serviceName);
-                console.log('I am here----- s2sUrl ' + s2sUrl);
                 console.log('I am here----- s2sSecret ' + s2sSecret);
-                console.log('I am here----- microService ' + microService);
 
                 const otpPassword = otp({ secret: s2sSecret }).totp();
                 const serviceAuthRequest = {
@@ -45,17 +41,11 @@ module.exports = async function serviceCallbackFunction() {
                     oneTimePassword: otpPassword
                 };
 
-                console.log('I am here----- amount ' + msg.body.amount);
-                console.log('I am here----- reference ' + msg.body.reference);
-                console.log('I am here----- status ' + msg.body.status);
-                console.log('I am here----- otpPassword ' + otpPassword);
-
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
-                    console.log('I am here----- ' + ' S2S Token : ' + JSON.stringify(token));
                     const serviceResponse  = s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {
@@ -65,9 +55,7 @@ module.exports = async function serviceCallbackFunction() {
                         json: true,
                         body: msg.body
                     }, function(error, response, body) {
-                    console.log('error : ' + JSON.stringify(error));
                     console.log('Response : ' + JSON.stringify(response));
-                    console.log('body : ' + JSON.stringify(body));
                     if(response && response.statusCode >= 200 && response.statusCode < 300) {
                         console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
@@ -94,12 +82,10 @@ module.exports = async function serviceCallbackFunction() {
                 }).catch(error => {
                     console.log('Error in fetching S2S token message ' + error.message + ' response ' + error.response);
                 });
-                console.log('I am here-----13 Message Delivered to Service!!!');
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()
             }
-            console.log('I am here-----14 Message Delivered to Service!!!');
         } catch (err) {
             console.log('Error response received from ', serviceCallbackUrl, err);
         } finally {

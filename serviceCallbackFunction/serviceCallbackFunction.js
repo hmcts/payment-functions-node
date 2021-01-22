@@ -32,13 +32,9 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
-                console.log('I am here----- ' + serviceCallbackUrl);
-                console.log('I am here----- ' + serviceName);
 
-                // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
-                // const s2sSecret = 'VMRSXPISHBYGGJCI';
-                // const microService = 'payment_app';
-
+                console.log('I am here----- serviceCallbackUrl ' + serviceCallbackUrl);
+                console.log('I am here----- serviceName ' + serviceName);
                 console.log('I am here----- s2sUrl ' + s2sUrl);
                 console.log('I am here----- s2sSecret ' + s2sSecret);
                 console.log('I am here----- microService ' + microService);
@@ -48,10 +44,12 @@ module.exports = async function serviceCallbackFunction() {
                     microservice: microService,
                     oneTimePassword: otpPassword
                 };
+
                 console.log('I am here----- amount ' + msg.body.amount);
                 console.log('I am here----- reference ' + msg.body.reference);
                 console.log('I am here----- status ' + msg.body.status);
                 console.log('I am here----- otpPassword ' + otpPassword);
+
                 s2sRequest.post({
                     uri: s2sUrl + '/lease',
                     body: serviceAuthRequest,

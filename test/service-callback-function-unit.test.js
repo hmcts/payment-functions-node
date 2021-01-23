@@ -47,7 +47,7 @@ describe("When messages are received", function () {
             complete: sandbox.stub(),
             clone: sandbox.stub()
         }];
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode":200}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":200}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
     });
 
@@ -56,7 +56,7 @@ describe("When messages are received", function () {
         await serviceCallbackFunction();
         expect(s2sRequest.post).to.have.been.calledOnce;
         expect(s2sRequest.put).to.have.been.calledOnce;
-        expect(messages[0].complete).to.have.been.called
+        expect(messages[0].complete).to.have.been.called;
     });
 });
 
@@ -130,7 +130,7 @@ describe("When no userproperties recieved", function () {
 describe("When serviceCallbackUrl returns success, s2sToken not received", function () {
     before(function () {
         //request.send = sandbox.stub().returns({ "status": 200 });
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode":200}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":200}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 500, "message" : "S2SToken Failed"});
         messages = [{
             body: JSON.stringify({
@@ -156,7 +156,7 @@ describe("When serviceCallbackUrl returns success, s2sToken not received", funct
 describe("When serviceCallbackUrl returns error, deadletter success", function () {
     before(function () {
         //request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode":500}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
             body: JSON.stringify({
@@ -175,9 +175,9 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
         await serviceCallbackFunction();
         expect(s2sRequest.put).to.have.been.calledOnce;
         //expect(console.log).to.have.been.calledWithMatch('Error response received from ');
-        //expect(messages[0].clone).to.have.been.called
+        expect(messages[0].clone).to.have.been.called
         //expect(console.log).to.have.been.calledWithMatch('Message is scheduled to retry at UTC:');
-        //expect(messages[0].userProperties.retries).to.equals(1);
+        expect(messages[0].userProperties.retries).to.equals(1);
     });
 
 });
@@ -185,7 +185,7 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
 describe("When serviceCallbackUrl returns error, deadletter success", function () {
     before(function () {
         //request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode":500}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
             body: JSON.stringify({
@@ -218,7 +218,7 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
 describe("When serviceCallbackUrl returns error, deadletter fails", function () {
     before(function () {
         //request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode" : 500}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode" : 500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
             body: JSON.stringify({
@@ -247,7 +247,7 @@ describe("When serviceCallbackUrl returns error, deadletter fails", function () 
 describe("When serviceCallbackUrl returns error, deadletter fails", function () {
     before(function () {
         //request.send = sandbox.stub().returns({ "status": 500 });
-        sandbox.stub(s2sRequest, 'put').resolves(null, {"statusCode" : 500}, null);
+        sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode" : 500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
             body: JSON.stringify({

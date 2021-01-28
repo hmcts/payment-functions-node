@@ -15,8 +15,6 @@ chai.use(sinonChai);
 
 let messages, loggerStub;
 beforeEach(function () {
-    //request.put = sandbox.stub().returns(request);
-    
     console = {
         log: sandbox.stub()
     }
@@ -148,14 +146,12 @@ describe("When serviceCallbackUrl returns success, s2sToken not received", funct
     it('if there is an error from S2S Service Token, an error is logged', async function () {
         await serviceCallbackFunction();
         expect(s2sRequest.post).to.have.been.calledOnce;
-        //expect(console.log).to.have.been.calledWithMatch('Error in fetching S2S token message ');
     });
 });
 
 
 describe("When serviceCallbackUrl returns error, deadletter success", function () {
     before(function () {
-        //request.send = sandbox.stub().returns({ "status": 500 });
         sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
@@ -174,9 +170,7 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
     it('if there is an error from serviceCallbackUrl, an error is logged', async function () {
         await serviceCallbackFunction();
         expect(s2sRequest.put).to.have.been.calledOnce;
-        //expect(console.log).to.have.been.calledWithMatch('Error response received from ');
         expect(messages[0].clone).to.have.been.called
-        //expect(console.log).to.have.been.calledWithMatch('Message is scheduled to retry at UTC:');
         expect(messages[0].userProperties.retries).to.equals(1);
     });
 
@@ -184,7 +178,6 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
 
 describe("When serviceCallbackUrl returns error, deadletter success", function () {
     before(function () {
-        //request.send = sandbox.stub().returns({ "status": 500 });
         sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode":500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
@@ -205,19 +198,13 @@ describe("When serviceCallbackUrl returns error, deadletter success", function (
          await serviceCallbackFunction();
          await serviceCallbackFunction();
          expect(s2sRequest.put).to.have.been.calledThrice;
-         //expect(request.put).to.have.been.calledWith(messages[0].userProperties.serviceCallbackUrl);
-         //expect(console.log).to.have.been.calledWithMatch('Error response received from ');
-//         expect(messages[0].clone).to.have.been.called
-//         expect(console.log).to.have.been.calledWithMatch('Message is scheduled to retry at UTC:');
-//         expect(messages[0].userProperties.retries).to.equals(3);
-//         expect(console.log).to.have.been.calledWithMatch('Max number of retries reached for');
-         //expect(messages[0].deadLetter).to.have.been.called
+         expect(messages[0].clone).to.have.been.called
+         expect(messages[0].userProperties.retries).to.equals(3);
      });
 });
 
 describe("When serviceCallbackUrl returns error, deadletter fails", function () {
     before(function () {
-        //request.send = sandbox.stub().returns({ "status": 500 });
         sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode" : 500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
@@ -236,17 +223,12 @@ describe("When serviceCallbackUrl returns error, deadletter fails", function () 
     it('if there is an error from serviceCallbackUrl, an error is logged', async function () {
         await serviceCallbackFunction();
         expect(s2sRequest.put).to.have.been.calledOnce;
-        //expect(console.log).to.have.been.calledWithMatch('Error response received from ');
-        //expect(messages[0].clone).to.have.been.called
-        //expect(console.log).to.have.been.calledWithMatch('Message is scheduled to retry at UTC:');
-        //expect(messages[0].userProperties.retries).to.equals(1);
     });
 
 });
 
 describe("When serviceCallbackUrl returns error, deadletter fails", function () {
     before(function () {
-        //request.send = sandbox.stub().returns({ "status": 500 });
         sandbox.stub(s2sRequest, 'put').yields(null, {"statusCode" : 500}, null);
         sandbox.stub(s2sRequest, 'post').resolves({"status" : 200, "token":"12345"});
         messages = [{
@@ -268,13 +250,6 @@ describe("When serviceCallbackUrl returns error, deadletter fails", function () 
          await serviceCallbackFunction();
          await serviceCallbackFunction();
          expect(s2sRequest.put).to.have.been.calledThrice;
-         //expect(request.put).to.have.been.calledWith(messages[0].userProperties.serviceCallbackUrl);
-//         expect(console.log).to.have.been.calledWithMatch('Error response received from ');
-//         expect(messages[0].clone).to.have.been.called
-//         expect(console.log).to.have.been.calledWithMatch('Message is scheduled to retry at UTC:');
-//         expect(messages[0].userProperties.retries).to.equals(3);
-//         expect(console.log).to.have.been.calledWithMatch('Max number of retries reached for');
-         //expect(messages[0].deadLetter).to.have.been.called
      });
 });
 

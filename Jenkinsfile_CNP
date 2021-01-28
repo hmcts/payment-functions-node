@@ -20,9 +20,15 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-withPipeline(type, product, component) {
-  disableLegacyDeployment()
-  nonServiceApp()
-  loadVaultSecrets(secrets)
-}
+def vaultOverrides = [
+        'preview': 'aat',
+        'hmctsdemo': 'aat',
 
+]
+
+withPipeline(type, product, component) {
+    overrideVaultEnvironments(vaultOverrides)
+    disableLegacyDeployment()
+    nonServiceApp()
+    loadVaultSecrets(secrets)
+}

@@ -6,6 +6,10 @@
   "appInsightsInstumentationKey": "124e39c3-6dad-49ef-aede-d2cddac865c2",
   "delayMessageMinutes": 30,
   "s2sUrl": "http://rpe-service-auth-provider-demo.service.core-compute-demo.internal",
-  "payment-s2s-secret": "Dummy",
-  "microservicePaymentApp": "payment_app"
+  "microservicePaymentApp": "payment_app",
+  "secrets": {
+    "ccpay": {
+      "payment-s2s-secret": "Dummy"
+    }
+  }
 }

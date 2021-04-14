@@ -33,8 +33,6 @@ module.exports = async function serviceCallbackFunction() {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 serviceName = msg.userProperties.serviceName;
 
-                console.log('I am here----- s2sSecret ' + s2sSecret);
-
                 const otpPassword = otp({ secret: s2sSecret }).totp();
                 const serviceAuthRequest = {
                     microservice: microService,
@@ -46,6 +44,7 @@ module.exports = async function serviceCallbackFunction() {
                     body: serviceAuthRequest,
                     json: true
                 }).then(token => {
+                    console.log('S2S Token Retrieved.......');
                     const serviceResponse  = s2sRequest.put({
                         uri: serviceCallbackUrl,
                         headers: {

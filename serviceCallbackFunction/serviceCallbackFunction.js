@@ -56,7 +56,6 @@ module.exports = async function serviceCallbackFunction() {
                     }, function(error, response, body) {
                     console.log('Response : ' + JSON.stringify(response));
                     if(response && response.statusCode >= 200 && response.statusCode < 300) {
-                        console.log('Response : ' + JSON.stringify(response));
                         console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                     } else {
                         console.log('Error in Calling Service ' + JSON.stringify(response));

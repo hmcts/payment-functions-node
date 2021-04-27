@@ -47,8 +47,8 @@ module.exports = async function serviceCallbackFunction() {
                     .then(() => {
                         console.log("Dead lettered a message ", JSON.stringify(msg.body));
                     })
-                    .catch(err => {
-                        console.log("Error while dead letter message ", err)
+                    .catch(errs => {
+                        console.log("Error while dead letter message ", errs)
                     });
             } else {
                 msg.userProperties.retries++;

@@ -1,10 +1,11 @@
 function:
-  trigger:
-    type: azure-servicebus
-    servicebus:
-      topicName: "servicecallbacktopic"
-      subscriptionName: defaultServiceCallbackSubscription
-      connection: SERVICE_CALLBACK_BUS_CONNECTION
-      queueLength: 1
+  triggerAuthName: "azure-mi-auth"
+  triggers:
+    - type: azure-servicebus
+      servicebus:
+        topicName: "servicecallbacktopic"
+        subscriptionName: defaultServiceCallbackSubscription
+        connection: SERVICE_CALLBACK_BUS_CONNECTION
+        queueLength: 1
 servicebus:
   enabled: false

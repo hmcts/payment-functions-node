@@ -25,7 +25,7 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 const res = await request.put(serviceCallbackUrl).send(msg.body);
-                console.log("Attempting to invoke callback" + serviceCallbackUrl);
+                console.log("Attempting to invoke callback " + serviceCallbackUrl);
                 if (res && res.status >= 200 && res.status < 300) {
                     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                 } else {

@@ -29,7 +29,7 @@ module.exports = async function serviceCallbackFunction() {
                 if (res && res.status >= 200 && res.status < 300) {
                     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                 } else {
-                    console.log('Received response status  ', res.status);
+                    console.log('Received response status ', res.status);
                     throw res.status;
                 }
             } else {

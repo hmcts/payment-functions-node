@@ -4,6 +4,8 @@ charts
 test
 .eslintrc.yml
 .gitignore
+.scannerwork
+./.scannerwork/scanner-report
 Dockerfile
 Jenkinsfile_CNP
 Jenkinsfile_parameterized

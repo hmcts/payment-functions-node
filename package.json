@@ -44,5 +44,8 @@
       "lcov",
       "text"
     ]
+  },
+  "resolutions": {
+    "**/**/node-fetch": "^2.6.1"
   }
 }

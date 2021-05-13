@@ -30,55 +30,14 @@ module.exports = async function serviceCallbackFunction() {
         try {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
-                serviceName = msg.userProperties.serviceName;
-                console.log('I am here-----1 ' + serviceCallbackUrl);
-                console.log('I am here-----1 ' + serviceName);
-
-                // const s2sUrl = 'http://rpe-service-auth-provider-demo.service.core-compute-demo.internal';
-                // const s2sSecret = 'VMRSXPISHBYGGJCI';
-                // const microService = 'payment_app';
-
-                console.log('I am here-----1 s2sUrl ' + s2sUrl);
-                console.log('I am here-----1 s2sSecret ' + s2sSecret);
-                console.log('I am here-----1 microService ' + microService);
-
-                const otpPassword = otp({ secret: s2sSecret }).totp();
-                const serviceAuthRequest = {
-                    microservice: microService,
-                    oneTimePassword: otpPassword
-                };
-                console.log('I am here-----11 ' + ' otpPassword : ' + otpPassword);
-                request.post({
-                    uri: s2sUrl + '/lease',
-                    body: serviceAuthRequest,
-                    json: true
-                }, (token) => {
-                    console.log('I am here-----123');
-                    console.log(token);
-
-                    if (token && !token.errno) {
-                        console.log('I am here-----12 ' + ' S2S Token : ' + JSON.stringify(token));
-
-                        const res = request.put({
-                            uri: serviceCallbackUrl,
-                            headers: {
-                                ServiceAuthorization: token,
-                                'Content-Type': 'application/json'
-                            },
-                            json: true
-                        }).send(msg.body);
-                        console.log('Service Response : ' + res.status);
-                        if (res && res.status >= 200 && res.status < 300) {
-                            console.log('Message Sent Successfully to ' + serviceCallbackUrl + 'token ' + token);
-                        } else {
-                            console.log('Received response status  ', res.status);
-                            throw res.status;
-                        }
-                    }
-                    if (token && token.errno) {
-                        console.log('Error in fetching S2S token ' + token.errno + token.code);
-                    }
-                })
+                const res = await request.put(serviceCallbackUrl).send(msg.body);
+                console.log("Attempting to invoke callback " + serviceCallbackUrl);
+                if (res && res.status >= 200 && res.status < 300) {
+                    console.log('Message Sent Successfully to ' + serviceCallbackUrl);
+                } else {
+                    console.log('Received response status  ', res.status);
+                    throw res.status;
+                }
             } else {
                 console.log('Skipping processing invalid message and sending to dead letter' + JSON.stringify(msg.body));
                 await msg.deadLetter()
@@ -94,8 +53,8 @@ module.exports = async function serviceCallbackFunction() {
                     .then(() => {
                         console.log("Dead lettered a message ", JSON.stringify(msg.body));
                     })
-                    .catch(err => {
-                        console.log("Error while dead letter message ", err)
+                    .catch(errs => {
+                        console.log("Error while dead letter message ", errs)
                     });
             } else {
                 msg.userProperties.retries++;

@@ -25,11 +25,11 @@ module.exports = async function serviceCallbackFunction() {
             if (this.validateMessage(msg)) {
                 serviceCallbackUrl = msg.userProperties.serviceCallbackUrl;
                 const res = await request.put(serviceCallbackUrl).send(msg.body);
-                console.log("Attempting to invoke callback" + serviceCallbackUrl);
+                console.log("Attempting to invoke callback " + serviceCallbackUrl);
                 if (res && res.status >= 200 && res.status < 300) {
                     console.log('Message Sent Successfully to ' + serviceCallbackUrl);
                 } else {
-                    console.log('Received response status  ', res.status);
+                    console.log('Received response status ', res.status);
                     throw res.status;
                 }
             } else {
@@ -47,8 +47,8 @@ module.exports = async function serviceCallbackFunction() {
                     .then(() => {
                         console.log("Dead lettered a message ", JSON.stringify(msg.body));
                     })
-                    .catch(err => {
-                        console.log("Error while dead letter message ", err)
+                    .catch(errs => {
+                        console.log("Error while dead letter message ", errs)
                     });
             } else {
                 msg.userProperties.retries++;

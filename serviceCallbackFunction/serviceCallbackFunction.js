@@ -22,7 +22,7 @@ module.exports = async function serviceCallbackFunction() {
     const receiver = subscriptionClient.createReceiver(ReceiveMode.peekLock);
     const messages = await receiver.receiveMessages(processMessagesCount);
     if (messages.length == 0) {
-        console.log('no message received from ServiceBusTopic!!!');
+        console.log('no messages received from ServiceBusTopic!!!');
     }
     for (let i = 0; i < messages.length; i++) {
         let msg = messages[i];
